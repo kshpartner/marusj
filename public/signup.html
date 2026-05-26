@@ -18,10 +18,8 @@
         </div>
 
         <form id="signupForm" class="login-form">
-          <label>
-            상위 UID
-            <input id="signupRefUid" type="text" readonly />
-          </label>
+          <input id="signupRefUid" type="hidden" />
+
           <label>
             이름
             <input id="signupName" type="text" autocomplete="name" required />
@@ -41,7 +39,7 @@
             </div>
             <label class="check-label">
               <input id="agreeTerms" type="checkbox" required />
-              상조 서비스 이용약관에 동의합니다.
+              상조 회원 가입 약관에 동의합니다.
             </label>
             <label class="check-label">
               <input id="agreePrivacy" type="checkbox" required />
@@ -54,7 +52,7 @@
           </div>
 
           <button class="primary-button" type="submit">상조 가입 신청</button>
-          <p id="signupMessage" class="form-note">admin 또는 영업사원 링크를 통해 가입하면 해당 상위 하위 상조 회원으로 연결됩니다.</p>
+          <p id="signupMessage" class="form-note">가입 신청 후 담당자가 상담을 위해 연락드립니다.</p>
         </form>
       </section>
     </main>

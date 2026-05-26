@@ -56,6 +56,13 @@ async function loadActiveTerms() {
 signupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  if (!signupRefUid.value) {
+    signupMessage.textContent = "유효하지 않은 가입 링크입니다.";
+    signupMessage.classList.add("error");
+    showToast("가입 링크를 확인해주세요.");
+    return;
+  }
+
   try {
     const response = await fetch("/api/signup", {
       method: "POST",
