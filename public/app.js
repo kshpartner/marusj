@@ -4,10 +4,14 @@ if (!isLoggedIn) {
   window.location.replace("./login.html");
 }
 
+const currentUser = JSON.parse(sessionStorage.getItem("maruAdminUser") || "{}");
+const isAdmin = currentUser.role === "admin";
+const currentRootUid = currentUser.uid || "admin";
 const logoutButton = document.querySelector("#logoutButton");
 const menuItems = document.querySelectorAll(".menu-item");
 const views = document.querySelectorAll(".view");
 const viewTitle = document.querySelector("#viewTitle");
+const rootEyebrow = document.querySelector(".topbar .eyebrow");
 const toast = document.querySelector("#toast");
 const refUid = document.querySelector("#refUid");
 const inviteUrl = document.querySelector("#inviteUrl");
@@ -42,6 +46,21 @@ const roleLabels = {
   customer: "상조 회원",
 };
 
+function applyPermissions() {
+  document.querySelectorAll('[data-view="terms"]').forEach((item) => {
+    item.hidden = !isAdmin;
+  });
+
+  if (rootEyebrow) {
+    rootEyebrow.textContent = isAdmin ? "최상위 루트: admin" : `조회 루트: ${currentRootUid}`;
+  }
+
+  if (refUid) {
+    refUid.value = currentRootUid;
+    refUid.readOnly = !isAdmin;
+  }
+}
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
@@ -49,6 +68,11 @@ function showToast(message) {
 }
 
 function setView(viewName) {
+  if (viewName === "terms" && !isAdmin) {
+    showToast("약관 관리는 admin 권한에서만 사용할 수 있습니다.");
+    viewName = "dashboard";
+  }
+
   menuItems.forEach((item) => {
     item.classList.toggle("active", item.dataset.view === viewName);
   });
@@ -69,7 +93,7 @@ function setView(viewName) {
 }
 
 function updateInviteUrl() {
-  const uid = refUid.value.trim() || "admin";
+  const uid = refUid.value.trim() || currentRootUid;
   const url = new URL(window.location.href);
   url.search = "";
   url.hash = "";
@@ -119,7 +143,7 @@ function buildTree(members, query = "") {
     member.children = childUids.map((uid) => memberMap.get(uid)).filter(Boolean);
   });
 
-  const root = memberMap.get("admin") || [...memberMap.values()].find((member) => !member.parentUid && !member.parent_uid);
+  const root = memberMap.get(currentRootUid) || [...memberMap.values()].find((member) => !member.parentUid && !member.parent_uid);
 
   function cloneVisible(member) {
     const visibleChildren = member.children.map(cloneVisible).filter(Boolean);
@@ -187,7 +211,7 @@ async function loadTree() {
   treeBoard.append(loading);
 
   try {
-    const response = await fetch("/api/members/tree?rootUid=admin");
+    const response = await fetch(`/api/members/tree?rootUid=${encodeURIComponent(currentRootUid)}`);
     const result = await response.json();
 
     if (!response.ok) {
@@ -215,7 +239,7 @@ async function copyText(value, successMessage) {
 }
 
 async function createInviteLink() {
-  const uid = refUid.value.trim() || "admin";
+  const uid = refUid.value.trim() || currentRootUid;
 
   try {
     const response = await fetch("/api/invite-links", {
@@ -427,4 +451,5 @@ document.querySelector("#termType").addEventListener("change", (event) => {
 document.querySelector("#termScope").addEventListener("change", loadTerms);
 treeSearchInput.addEventListener("input", renderTree);
 refUid.addEventListener("input", updateInviteUrl);
+applyPermissions();
 updateInviteUrl();
