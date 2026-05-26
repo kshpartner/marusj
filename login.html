@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 | MaRu Partner Admin</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-visual" aria-label="파트너 계층 구조 미리보기">
+        <div class="network-map">
+          <span class="node node-admin">admin</span>
+          <span class="node node-sales-a">sales_001</span>
+          <span class="node node-sales-b">sales_002</span>
+          <span class="node node-customer-a">customer</span>
+          <span class="node node-customer-b">customer</span>
+          <span class="node node-customer-c">customer</span>
+          <span class="line line-a"></span>
+          <span class="line line-b"></span>
+          <span class="line line-c"></span>
+          <span class="line line-d"></span>
+          <span class="line line-e"></span>
+        </div>
+      </section>
+
+      <section class="login-panel" aria-labelledby="loginTitle">
+        <div class="brand-lockup">
+          <div class="brand-mark">M</div>
+          <div>
+            <p class="eyebrow">파트너 관리 시스템</p>
+            <h1 id="loginTitle">MaRu Partner Admin</h1>
+          </div>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <label>
+            아이디
+            <input id="loginId" type="text" autocomplete="username" value="admin" required />
+          </label>
+          <label>
+            비밀번호
+            <input id="loginPassword" type="password" autocomplete="current-password" value="1" required />
+          </label>
+          <button class="primary-button" type="submit">로그인</button>
+          <p id="loginMessage" class="form-note">초기 계정: admin / 1</p>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./login.js"></script>
+  </body>
+</html>
