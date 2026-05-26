@@ -213,8 +213,79 @@
         <section class="view placeholder-view" id="settlementView">
           <div class="panel"><h3>정산 관리</h3><p>승인 대기, 지급 완료, 환수 상태를 관리할 영역입니다.</p></div>
         </section>
-        <section class="view placeholder-view" id="termsView">
-          <div class="panel"><h3>약관 관리</h3><p>서비스 약관과 개인정보 동의서 버전을 관리할 영역입니다.</p></div>
+        <section class="view" id="termsView">
+          <div class="content-grid terms-grid">
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>약관 등록</h3>
+              </div>
+              <form id="termForm" class="term-form">
+                <label>
+                  약관 종류
+                  <select id="termType" required>
+                    <option value="service_terms">상조 서비스 이용약관</option>
+                    <option value="privacy_policy">개인정보 수집 및 이용 동의</option>
+                    <option value="marketing_consent">마케팅 수신 동의</option>
+                  </select>
+                </label>
+                <label>
+                  제목
+                  <input id="termTitle" type="text" required />
+                </label>
+                <label>
+                  버전
+                  <input id="termVersion" type="text" value="1.0" required />
+                </label>
+                <label>
+                  내용
+                  <textarea id="termContent" rows="9" required></textarea>
+                </label>
+                <div class="term-options">
+                  <label class="check-label">
+                    <input id="termRequired" type="checkbox" checked />
+                    필수 동의
+                  </label>
+                  <label class="check-label">
+                    <input id="termActive" type="checkbox" checked />
+                    저장 후 활성화
+                  </label>
+                </div>
+                <button class="primary-button" type="submit">약관 저장</button>
+              </form>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>약관 목록</h3>
+                <button class="outline-button compact-action" id="refreshTermsButton" type="button">새로고침</button>
+              </div>
+              <div id="termsList" class="terms-list">
+                <div class="tree-loading">약관을 불러오는 중입니다.</div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel terms-history-panel">
+            <div class="panel-heading">
+              <h3>최근 동의 이력</h3>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>회원 UID</th>
+                    <th>약관</th>
+                    <th>버전</th>
+                    <th>동의</th>
+                    <th>일시</th>
+                  </tr>
+                </thead>
+                <tbody id="termAgreementsBody">
+                  <tr><td colspan="5">동의 이력을 불러오는 중입니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </section>
         <section class="view placeholder-view" id="settingsView">
           <div class="panel"><h3>설정</h3><p>권한, 커미션 정책, 알림 설정을 관리할 영역입니다.</p></div>

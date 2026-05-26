@@ -5,7 +5,9 @@ const signupPhone = document.querySelector("#signupPhone");
 const signupEmail = document.querySelector("#signupEmail");
 const agreeTerms = document.querySelector("#agreeTerms");
 const agreePrivacy = document.querySelector("#agreePrivacy");
+const agreeMarketing = document.querySelector("#agreeMarketing");
 const signupMessage = document.querySelector("#signupMessage");
+const activeTermsList = document.querySelector("#activeTermsList");
 const toast = document.querySelector("#toast");
 
 const params = new URLSearchParams(window.location.search);
@@ -15,6 +17,40 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function renderActiveTerms(terms) {
+  activeTermsList.replaceChildren();
+
+  if (!terms.length) {
+    const empty = document.createElement("div");
+    empty.className = "form-note";
+    empty.textContent = "활성 약관이 없습니다.";
+    activeTermsList.append(empty);
+    return;
+  }
+
+  terms.forEach((term) => {
+    const item = document.createElement("details");
+    item.className = "terms-preview";
+    const summary = document.createElement("summary");
+    const content = document.createElement("p");
+
+    summary.textContent = `${term.title} v${term.version}${term.requiredYn === "Y" ? " (필수)" : " (선택)"}`;
+    content.textContent = term.content;
+    item.append(summary, content);
+    activeTermsList.append(item);
+  });
+}
+
+async function loadActiveTerms() {
+  try {
+    const response = await fetch("/api/terms/active");
+    const result = await response.json();
+    renderActiveTerms(result.terms || []);
+  } catch {
+    renderActiveTerms([]);
+  }
 }
 
 signupForm.addEventListener("submit", async (event) => {
@@ -33,6 +69,7 @@ signupForm.addEventListener("submit", async (event) => {
         email: signupEmail.value.trim(),
         agreedTerms: agreeTerms.checked,
         agreedPrivacy: agreePrivacy.checked,
+        agreedMarketing: agreeMarketing.checked,
       }),
     });
 
@@ -56,3 +93,5 @@ signupForm.addEventListener("submit", async (event) => {
     showToast("API 서버 실행 상태를 확인해주세요.");
   }
 });
+
+loadActiveTerms();

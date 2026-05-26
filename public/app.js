@@ -13,9 +13,14 @@ const refUid = document.querySelector("#refUid");
 const inviteUrl = document.querySelector("#inviteUrl");
 const treeBoard = document.querySelector("#treeBoard");
 const treeSearchInput = document.querySelector("#treeSearchInput");
+const termForm = document.querySelector("#termForm");
+const termsList = document.querySelector("#termsList");
+const termAgreementsBody = document.querySelector("#termAgreementsBody");
+const refreshTermsButton = document.querySelector("#refreshTermsButton");
 
 let treeMembers = [];
 let treeLoaded = false;
+let termsLoaded = false;
 
 const viewLabels = {
   dashboard: "대시보드",
@@ -55,6 +60,10 @@ function setView(viewName) {
 
   if (viewName === "tree" && !treeLoaded) {
     loadTree();
+  }
+
+  if (viewName === "terms" && !termsLoaded) {
+    loadTerms();
   }
 }
 
@@ -232,6 +241,155 @@ async function createInviteLink() {
   }
 }
 
+function getTermTypeLabel(type) {
+  const labels = {
+    service_terms: "상조 서비스 이용약관",
+    privacy_policy: "개인정보 수집 및 이용 동의",
+    marketing_consent: "마케팅 수신 동의",
+  };
+
+  return labels[type] || type;
+}
+
+function renderTerms(terms) {
+  termsList.replaceChildren();
+
+  if (!terms.length) {
+    const empty = document.createElement("div");
+    empty.className = "tree-loading";
+    empty.textContent = "등록된 약관이 없습니다.";
+    termsList.append(empty);
+    return;
+  }
+
+  terms.forEach((term) => {
+    const item = document.createElement("article");
+    const heading = document.createElement("div");
+    const title = document.createElement("strong");
+    const meta = document.createElement("span");
+    const content = document.createElement("p");
+    const actions = document.createElement("div");
+    const activateButton = document.createElement("button");
+
+    item.className = "term-item";
+    heading.className = "term-item-heading";
+    title.textContent = `${term.title} v${term.version}`;
+    meta.textContent = `${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"} · ${term.activeYn === "Y" ? "활성" : "비활성"}`;
+    content.textContent = term.content;
+    actions.className = "term-item-actions";
+    activateButton.type = "button";
+    activateButton.className = "outline-button compact-action";
+    activateButton.textContent = "활성화";
+    activateButton.disabled = term.activeYn === "Y";
+    activateButton.addEventListener("click", () => activateTerm(term.id));
+
+    heading.append(title, meta);
+    actions.append(activateButton);
+    item.append(heading, content, actions);
+    termsList.append(item);
+  });
+}
+
+function renderAgreements(agreements) {
+  termAgreementsBody.replaceChildren();
+
+  if (!agreements.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.textContent = "동의 이력이 없습니다.";
+    row.append(cell);
+    termAgreementsBody.append(row);
+    return;
+  }
+
+  agreements.forEach((agreement) => {
+    const row = document.createElement("tr");
+    [agreement.userUid, agreement.termTitle, agreement.termVersion, agreement.agreedYn, agreement.agreedAt]
+      .forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = value || "";
+        row.append(cell);
+      });
+    termAgreementsBody.append(row);
+  });
+}
+
+async function loadTerms() {
+  try {
+    const [termsResponse, agreementsResponse] = await Promise.all([
+      fetch("/api/terms"),
+      fetch("/api/terms/agreements"),
+    ]);
+
+    const termsResult = await termsResponse.json();
+    const agreementsResult = await agreementsResponse.json();
+
+    renderTerms(termsResult.terms || []);
+    renderAgreements(agreementsResult.agreements || []);
+    termsLoaded = true;
+  } catch {
+    showToast("약관 정보를 불러오지 못했습니다.");
+  }
+}
+
+async function saveTerm(event) {
+  event.preventDefault();
+
+  const payload = {
+    type: document.querySelector("#termType").value,
+    title: document.querySelector("#termTitle").value.trim(),
+    version: document.querySelector("#termVersion").value.trim(),
+    content: document.querySelector("#termContent").value.trim(),
+    requiredYn: document.querySelector("#termRequired").checked ? "Y" : "N",
+    activeYn: document.querySelector("#termActive").checked ? "Y" : "N",
+  };
+
+  try {
+    const response = await fetch("/api/terms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+    if (!response.ok) {
+      showToast(result.message || "약관 저장에 실패했습니다.");
+      return;
+    }
+
+    termForm.reset();
+    document.querySelector("#termVersion").value = "1.0";
+    document.querySelector("#termRequired").checked = true;
+    document.querySelector("#termActive").checked = true;
+    showToast("약관이 저장되었습니다.");
+    await loadTerms();
+  } catch {
+    showToast("약관 저장 중 오류가 발생했습니다.");
+  }
+}
+
+async function activateTerm(termId) {
+  try {
+    const response = await fetch(`/api/terms/${termId}/activate`, {
+      method: "PATCH",
+    });
+
+    if (!response.ok) {
+      const result = await response.json();
+      showToast(result.message || "약관 활성화에 실패했습니다.");
+      return;
+    }
+
+    showToast("약관이 활성화되었습니다.");
+    await loadTerms();
+  } catch {
+    showToast("약관 활성화 중 오류가 발생했습니다.");
+  }
+}
+
 logoutButton.addEventListener("click", () => {
   sessionStorage.removeItem("maruAdminLoggedIn");
   sessionStorage.removeItem("maruAdminUser");
@@ -258,6 +416,8 @@ document.querySelector("#copyInviteButton").addEventListener("click", () => {
   copyText(inviteUrl.value, "기본 상조 약관 링크를 복사했습니다.");
 });
 
+termForm.addEventListener("submit", saveTerm);
+refreshTermsButton.addEventListener("click", loadTerms);
 treeSearchInput.addEventListener("input", renderTree);
 refUid.addEventListener("input", updateInviteUrl);
 updateInviteUrl();

@@ -36,6 +36,11 @@ GET  /api/members/tree
 GET  /api/invite-links
 POST /api/invite-links
 POST /api/signup
+GET  /api/terms
+GET  /api/terms/active
+POST /api/terms
+PATCH /api/terms/:id/activate
+GET  /api/terms/agreements
 ```
 
 ## MSSQL

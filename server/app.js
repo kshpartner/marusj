@@ -9,6 +9,7 @@ const memberRoutes = require("./routes/members");
 const inviteLinkRoutes = require("./routes/inviteLinks");
 const signupRoutes = require("./routes/signup");
 const salesRoutes = require("./routes/sales");
+const termsRoutes = require("./routes/terms");
 const { hasDatabaseConfig } = require("./db");
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/members", memberRoutes);
 app.use("/api/invite-links", inviteLinkRoutes);
 app.use("/api/signup", signupRoutes);
 app.use("/api/sales", salesRoutes);
+app.use("/api/terms", termsRoutes);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicDir, "login.html"));

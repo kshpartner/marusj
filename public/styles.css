@@ -32,7 +32,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -243,7 +245,9 @@ label {
   font-weight: 800;
 }
 
-input {
+input,
+select,
+textarea {
   width: 100%;
   min-height: 44px;
   border: 1px solid var(--line);
@@ -254,7 +258,15 @@ input {
   outline: none;
 }
 
-input:focus {
+textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(18, 108, 101, 0.14);
 }
@@ -332,6 +344,31 @@ input:focus {
   border-radius: 8px;
   padding: 14px;
   background: var(--surface-muted);
+}
+
+.terms-preview-list {
+  display: grid;
+  gap: 8px;
+}
+
+.terms-preview {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.terms-preview summary {
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.terms-preview p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .check-label {
@@ -660,6 +697,67 @@ th {
   border-radius: 8px;
   background: var(--surface-muted);
   text-align: center;
+}
+
+.terms-grid {
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.term-form,
+.terms-list {
+  display: grid;
+  gap: 14px;
+}
+
+.term-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.compact-action {
+  min-height: 34px;
+  padding-inline: 12px;
+}
+
+.term-item {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+}
+
+.term-item-heading {
+  display: grid;
+  gap: 4px;
+}
+
+.term-item-heading span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.term-item p {
+  max-height: 130px;
+  overflow: auto;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.term-item-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.terms-history-panel {
+  margin-top: 18px;
 }
 
 .toast {
