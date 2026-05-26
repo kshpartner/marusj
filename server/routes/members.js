@@ -19,7 +19,7 @@ router.get("/", async (req, res, next) => {
     const pool = await getPool();
     const result = await pool.request().query(`
       SELECT id, uid, name, role, parent_uid AS parentUid, status
-      FROM dbo.Users
+      FROM dbo.MaruPartnerUsers
       ORDER BY id ASC
     `);
 
@@ -43,13 +43,13 @@ router.get("/tree", async (req, res, next) => {
       .query(`
         WITH UserTree AS (
           SELECT id, uid, name, role, parent_uid AS parentUid, status, 0 AS depth
-          FROM dbo.Users
+          FROM dbo.MaruPartnerUsers
           WHERE uid = @rootUid
 
           UNION ALL
 
           SELECT child.id, child.uid, child.name, child.role, child.parent_uid AS parentUid, child.status, parent.depth + 1
-          FROM dbo.Users child
+          FROM dbo.MaruPartnerUsers child
           INNER JOIN UserTree parent ON child.parent_uid = parent.uid
         )
         SELECT id, uid, name, role, parentUid, status, depth

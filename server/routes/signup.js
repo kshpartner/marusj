@@ -33,9 +33,9 @@ router.post("/", async (req, res, next) => {
       .input("phone", sql.NVarChar, phone)
       .input("email", sql.NVarChar, email || null)
       .query(`
-        INSERT INTO dbo.Users (uid, username, name, phone, email, role, parent_uid, status)
+        INSERT INTO dbo.MaruPartnerUsers (uid, username, name, phone, email, role, parent_uid, status)
         OUTPUT INSERTED.id, INSERTED.uid, INSERTED.parent_uid AS parentUid, INSERTED.name, INSERTED.phone, INSERTED.email, INSERTED.status
-        VALUES (CONCAT('customer_', NEXT VALUE FOR dbo.CustomerUidSeq), @phone, @name, @phone, @email, 'customer', @refUid, 'pending')
+        VALUES (CONCAT('customer_', NEXT VALUE FOR dbo.MaruPartnerCustomerUidSeq), @phone, @name, @phone, @email, 'customer', @refUid, 'pending')
       `);
 
     return res.status(201).json({ signup: result.recordset[0] });

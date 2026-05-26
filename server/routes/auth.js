@@ -15,7 +15,7 @@ router.post("/login", async (req, res, next) => {
         .input("password", sql.NVarChar, password)
         .query(`
           SELECT TOP 1 id, uid, username, name, role
-          FROM dbo.Users
+          FROM dbo.MaruPartnerUsers
           WHERE username = @username
             AND password = @password
             AND status = 'active'

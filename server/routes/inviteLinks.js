@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
     const pool = await getPool();
     const result = await pool.request().query(`
       SELECT id, name, ref_uid AS refUid, clicks, signups, status
-      FROM dbo.InviteLinks
+      FROM dbo.MaruPartnerInviteLinks
       ORDER BY id DESC
     `);
 
@@ -47,7 +47,7 @@ router.post("/", async (req, res, next) => {
       .input("name", sql.NVarChar, name)
       .input("refUid", sql.NVarChar, refUid)
       .query(`
-        INSERT INTO dbo.InviteLinks (name, ref_uid, clicks, signups, status)
+        INSERT INTO dbo.MaruPartnerInviteLinks (name, ref_uid, clicks, signups, status)
         OUTPUT INSERTED.id, INSERTED.name, INSERTED.ref_uid AS refUid, INSERTED.clicks, INSERTED.signups, INSERTED.status
         VALUES (@name, @refUid, 0, 0, 'active')
       `);
