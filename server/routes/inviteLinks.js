@@ -8,8 +8,8 @@ router.get("/", async (req, res, next) => {
     if (!hasDatabaseConfig()) {
       return res.json({
         links: [
-          { id: 1, name: "기본 상조 약관 링크", refUid: "sales_001", clicks: 248, signups: 31, status: "active" },
-          { id: 2, name: "5월 캠페인", refUid: "sales_003", clicks: 91, signups: 12, status: "active" },
+          { id: 1, name: "admin 직속 상조 약관 링크", refUid: "admin", clicks: 0, signups: 0, status: "active" },
+          { id: 2, name: "영업사원 상조 약관 링크", refUid: "sales_001", clicks: 0, signups: 0, status: "active" },
         ],
       });
     }
@@ -28,10 +28,10 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name = "가입 링크", refUid } = req.body;
+  const { name = "상조 약관 링크", refUid } = req.body;
 
   if (!refUid) {
-    return res.status(400).json({ message: "추천인 UID가 필요합니다." });
+    return res.status(400).json({ message: "상위 UID가 필요합니다." });
   }
 
   try {
@@ -42,6 +42,21 @@ router.post("/", async (req, res, next) => {
     }
 
     const pool = await getPool();
+    const parent = await pool
+      .request()
+      .input("refUid", sql.NVarChar, refUid)
+      .query(`
+        SELECT TOP 1 uid, role
+        FROM dbo.MaruPartnerUsers
+        WHERE uid = @refUid
+          AND role IN ('admin', 'sales')
+          AND status = 'active'
+      `);
+
+    if (!parent.recordset[0]) {
+      return res.status(400).json({ message: "상조 약관 링크는 admin 또는 영업사원 UID로만 만들 수 있습니다." });
+    }
+
     const result = await pool
       .request()
       .input("name", sql.NVarChar, name)

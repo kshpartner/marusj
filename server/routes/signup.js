@@ -26,6 +26,21 @@ router.post("/", async (req, res, next) => {
     }
 
     const pool = await getPool();
+    const parent = await pool
+      .request()
+      .input("refUid", sql.NVarChar, refUid)
+      .query(`
+        SELECT TOP 1 uid, role
+        FROM dbo.MaruPartnerUsers
+        WHERE uid = @refUid
+          AND role IN ('admin', 'sales')
+          AND status = 'active'
+      `);
+
+    if (!parent.recordset[0]) {
+      return res.status(400).json({ message: "상조 회원은 admin 또는 영업사원 하위로만 가입할 수 있습니다." });
+    }
+
     const result = await pool
       .request()
       .input("refUid", sql.NVarChar, refUid)

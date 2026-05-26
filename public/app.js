@@ -59,7 +59,7 @@ function setView(viewName) {
 }
 
 function updateInviteUrl() {
-  const uid = refUid.value.trim() || "sales_001";
+  const uid = refUid.value.trim() || "admin";
   const url = new URL(window.location.href);
   url.search = "";
   url.hash = "";
@@ -205,7 +205,7 @@ async function copyText(value, successMessage) {
 }
 
 async function createInviteLink() {
-  const uid = refUid.value.trim() || "sales_001";
+  const uid = refUid.value.trim() || "admin";
 
   try {
     const response = await fetch("/api/invite-links", {

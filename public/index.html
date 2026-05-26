@@ -166,8 +166,8 @@
             </div>
             <div class="link-builder">
               <label>
-                추천인 UID
-                <input id="refUid" type="text" value="sales_001" />
+                상위 UID
+                <input id="refUid" type="text" value="admin" />
               </label>
               <label>
                 상조 약관 링크
@@ -180,14 +180,14 @@
                 <thead>
                   <tr>
                     <th>링크명</th>
-                    <th>추천 UID</th>
+                    <th>상위 UID</th>
                     <th>클릭</th>
                     <th>가입</th>
                     <th>상태</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>기본 상조 약관 링크</td><td>sales_001</td><td>248</td><td>31</td><td>사용중</td></tr>
+                  <tr><td>admin 직속 상조 약관 링크</td><td>admin</td><td>0</td><td>0</td><td>사용중</td></tr>
                   <tr><td>5월 캠페인</td><td>sales_003</td><td>91</td><td>12</td><td>사용중</td></tr>
                 </tbody>
               </table>
@@ -201,8 +201,8 @@
               <h3>상조 회원 가입 신청</h3>
             </div>
             <div class="empty-state">
-              <strong>가입 페이지는 추천 UID를 기준으로 회원을 자동 연결합니다.</strong>
-              <span>/signup.html?ref=sales_001 형태의 링크에서 약관 동의와 개인정보 활용 동의를 받은 뒤 상조 회원으로 저장합니다.</span>
+              <strong>가입 페이지는 상위 UID를 기준으로 회원을 자동 연결합니다.</strong>
+              <span>/signup.html?ref=admin 또는 /signup.html?ref=sales_001 형태의 링크에서 약관 동의와 개인정보 활용 동의를 받은 뒤 상조 회원으로 저장합니다.</span>
             </div>
           </div>
         </section>
