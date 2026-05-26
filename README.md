@@ -1,2 +1,42 @@
 # marusj
+
 마루상조 파트너스 어드민
+
+## 실행
+
+```powershell
+npm install
+npm start
+```
+
+서버 실행 후 브라우저에서 아래 주소로 접속합니다.
+
+```text
+http://localhost:3000/login.html
+```
+
+초기 로그인 계정은 `.env`가 없을 때 `admin / 1`입니다.
+
+## 환경 변수
+
+실제 DB 접속 정보는 `.env`에 넣고 GitHub에는 올리지 않습니다. 예시는 `.env.example`을 참고하세요.
+
+```powershell
+Copy-Item .env.example .env
+```
+
+## 주요 API
+
+```text
+GET  /api/health
+POST /api/auth/login
+GET  /api/members
+GET  /api/members/tree
+GET  /api/invite-links
+POST /api/invite-links
+POST /api/signup
+```
+
+## MSSQL
+
+초기 테이블 예시는 `server/schema.sql`에 있습니다.

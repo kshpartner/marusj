@@ -61,8 +61,37 @@ async function copyText(value, successMessage) {
   }
 }
 
+async function createInviteLink() {
+  const uid = refUid.value.trim() || "sales_001";
+
+  try {
+    const response = await fetch("/api/invite-links", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: "가입 링크",
+        refUid: uid,
+      }),
+    });
+
+    if (!response.ok) {
+      const result = await response.json();
+      showToast(result.message || "가입 링크 생성에 실패했습니다.");
+      return;
+    }
+
+    updateInviteUrl();
+    showToast("가입 링크가 생성되었습니다.");
+  } catch {
+    showToast("API 서버 실행 상태를 확인해주세요.");
+  }
+}
+
 logoutButton.addEventListener("click", () => {
   sessionStorage.removeItem("maruAdminLoggedIn");
+  sessionStorage.removeItem("maruAdminUser");
   window.location.replace("./login.html");
 });
 
@@ -74,10 +103,7 @@ document.querySelectorAll("[data-view-jump]").forEach((button) => {
   button.addEventListener("click", () => setView(button.dataset.viewJump));
 });
 
-document.querySelector("#createLinkButton").addEventListener("click", () => {
-  updateInviteUrl();
-  showToast("가입 링크가 생성되었습니다.");
-});
+document.querySelector("#createLinkButton").addEventListener("click", createInviteLink);
 
 document.querySelector("#copyBuiltLinkButton").addEventListener("click", () => {
   updateInviteUrl();
