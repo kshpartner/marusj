@@ -44,7 +44,8 @@ router.post("/", async (req, res, next) => {
     const activeTerms = await pool.request().query(`
       SELECT id, type, title, version, required_yn AS requiredYn
       FROM dbo.MaruPartnerTerms
-      WHERE active_yn = 'Y'
+      WHERE scope = 'funeral_member'
+        AND active_yn = 'Y'
     `);
 
     const requiredTerms = activeTerms.recordset.filter((term) => term.requiredYn === "Y");
@@ -113,10 +114,10 @@ router.post("/", async (req, res, next) => {
           .input("ip", sql.NVarChar, ip)
           .input("userAgent", sql.NVarChar, userAgent)
           .query(`
-            INSERT INTO dbo.MaruPartnerTermAgreements (
-              user_uid, term_id, term_type, term_title, term_version, agreed_yn, ip, user_agent
+          INSERT INTO dbo.MaruPartnerTermAgreements (
+              user_uid, term_id, term_scope, term_type, term_title, term_version, agreed_yn, ip, user_agent
             )
-            VALUES (@userUid, @termId, @termType, @termTitle, @termVersion, @agreedYn, @ip, @userAgent)
+            VALUES (@userUid, @termId, 'funeral_member', @termType, @termTitle, @termVersion, @agreedYn, @ip, @userAgent)
           `);
       }
 

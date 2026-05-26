@@ -36,9 +36,11 @@ GET  /api/members/tree
 GET  /api/invite-links
 POST /api/invite-links
 POST /api/signup
-GET  /api/terms
-GET  /api/terms/active
-PUT  /api/terms/:type
+GET  /api/terms?scope=sales_register
+GET  /api/terms?scope=funeral_member
+GET  /api/terms/active?scope=sales_register
+GET  /api/terms/active?scope=funeral_member
+PUT  /api/terms/:scope/:type
 GET  /api/terms/agreements
 ```
 

@@ -45,7 +45,7 @@ function renderActiveTerms(terms) {
 
 async function loadActiveTerms() {
   try {
-    const response = await fetch("/api/terms/active");
+    const response = await fetch("/api/terms/active?scope=funeral_member");
     const result = await response.json();
     renderActiveTerms(result.terms || []);
   } catch {

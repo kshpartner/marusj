@@ -252,6 +252,15 @@ function getTermTypeLabel(type) {
   return labels[type] || type;
 }
 
+function getTermScopeLabel(scope) {
+  const labels = {
+    sales_register: "영업사원 회원가입 약관",
+    funeral_member: "상조 회원 가입 약관",
+  };
+
+  return labels[scope] || scope;
+}
+
 function renderTerms(terms) {
   currentTerms = terms;
   termsList.replaceChildren();
@@ -276,7 +285,7 @@ function renderTerms(terms) {
     item.className = "term-item";
     heading.className = "term-item-heading";
     title.textContent = `${term.title} v${term.version}`;
-    meta.textContent = `${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"}`;
+    meta.textContent = `${getTermScopeLabel(term.scope)} · ${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"}`;
     content.textContent = term.content;
     actions.className = "term-item-actions";
     editButton.type = "button";
@@ -292,6 +301,7 @@ function renderTerms(terms) {
 }
 
 function fillTermForm(term) {
+  document.querySelector("#termScope").value = term.scope;
   document.querySelector("#termType").value = term.type;
   document.querySelector("#termTitle").value = term.title;
   document.querySelector("#termVersion").value = term.version;
@@ -305,7 +315,7 @@ function renderAgreements(agreements) {
   if (!agreements.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 5;
+    cell.colSpan = 6;
     cell.textContent = "동의 이력이 없습니다.";
     row.append(cell);
     termAgreementsBody.append(row);
@@ -314,7 +324,7 @@ function renderAgreements(agreements) {
 
   agreements.forEach((agreement) => {
     const row = document.createElement("tr");
-    [agreement.userUid, agreement.termTitle, agreement.termVersion, agreement.agreedYn, agreement.agreedAt]
+    [agreement.userUid, getTermScopeLabel(agreement.termScope), agreement.termTitle, agreement.termVersion, agreement.agreedYn, agreement.agreedAt]
       .forEach((value) => {
         const cell = document.createElement("td");
         cell.textContent = value || "";
@@ -327,7 +337,7 @@ function renderAgreements(agreements) {
 async function loadTerms() {
   try {
     const [termsResponse, agreementsResponse] = await Promise.all([
-      fetch("/api/terms"),
+      fetch(`/api/terms?scope=${encodeURIComponent(document.querySelector("#termScope").value)}`),
       fetch("/api/terms/agreements"),
     ]);
 
@@ -350,6 +360,7 @@ async function saveTerm(event) {
 
   const payload = {
     type: document.querySelector("#termType").value,
+    scope: document.querySelector("#termScope").value,
     title: document.querySelector("#termTitle").value.trim(),
     version: document.querySelector("#termVersion").value.trim(),
     content: document.querySelector("#termContent").value.trim(),
@@ -357,7 +368,7 @@ async function saveTerm(event) {
   };
 
   try {
-    const response = await fetch(`/api/terms/${encodeURIComponent(payload.type)}`, {
+    const response = await fetch(`/api/terms/${encodeURIComponent(payload.scope)}/${encodeURIComponent(payload.type)}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -407,11 +418,13 @@ document.querySelector("#copyInviteButton").addEventListener("click", () => {
 termForm.addEventListener("submit", saveTerm);
 refreshTermsButton.addEventListener("click", loadTerms);
 document.querySelector("#termType").addEventListener("change", (event) => {
-  const term = currentTerms.find((item) => item.type === event.target.value);
+  const scope = document.querySelector("#termScope").value;
+  const term = currentTerms.find((item) => item.scope === scope && item.type === event.target.value);
   if (term) {
     fillTermForm(term);
   }
 });
+document.querySelector("#termScope").addEventListener("change", loadTerms);
 treeSearchInput.addEventListener("input", renderTree);
 refUid.addEventListener("input", updateInviteUrl);
 updateInviteUrl();

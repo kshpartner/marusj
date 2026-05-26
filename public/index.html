@@ -221,6 +221,13 @@
               </div>
               <form id="termForm" class="term-form">
                 <label>
+                  약관 구분
+                  <select id="termScope" required>
+                    <option value="sales_register">영업사원 회원가입 약관</option>
+                    <option value="funeral_member">상조 회원 가입 약관</option>
+                  </select>
+                </label>
+                <label>
                   약관 종류
                   <select id="termType" required>
                     <option value="service_terms">상조 서비스 이용약관</option>
@@ -270,6 +277,7 @@
                 <thead>
                   <tr>
                     <th>회원 UID</th>
+                    <th>구분</th>
                     <th>약관</th>
                     <th>버전</th>
                     <th>동의</th>
@@ -277,7 +285,7 @@
                   </tr>
                 </thead>
                 <tbody id="termAgreementsBody">
-                  <tr><td colspan="5">동의 이력을 불러오는 중입니다.</td></tr>
+                  <tr><td colspan="6">동의 이력을 불러오는 중입니다.</td></tr>
                 </tbody>
               </table>
             </div>

@@ -73,6 +73,7 @@ IF OBJECT_ID('dbo.MaruPartnerTerms', 'U') IS NULL
 BEGIN
   CREATE TABLE dbo.MaruPartnerTerms (
     id INT IDENTITY(1,1) PRIMARY KEY,
+    scope NVARCHAR(50) NOT NULL DEFAULT 'funeral_member',
     type NVARCHAR(50) NOT NULL,
     title NVARCHAR(200) NOT NULL,
     version NVARCHAR(30) NOT NULL,
@@ -83,7 +84,12 @@ BEGIN
     updated_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
   );
 
-  CREATE INDEX IX_MaruPartnerTerms_TypeActive ON dbo.MaruPartnerTerms(type, active_yn);
+  CREATE INDEX IX_MaruPartnerTerms_ScopeTypeActive ON dbo.MaruPartnerTerms(scope, type, active_yn);
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerTerms', 'scope') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerTerms ADD scope NVARCHAR(50) NOT NULL DEFAULT 'funeral_member';
 END;
 
 IF OBJECT_ID('dbo.MaruPartnerTermAgreements', 'U') IS NULL
@@ -92,6 +98,7 @@ BEGIN
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_uid NVARCHAR(50) NOT NULL,
     term_id INT NOT NULL,
+    term_scope NVARCHAR(50) NOT NULL DEFAULT 'funeral_member',
     term_type NVARCHAR(50) NOT NULL,
     term_title NVARCHAR(200) NOT NULL,
     term_version NVARCHAR(30) NOT NULL,
@@ -102,6 +109,11 @@ BEGIN
   );
 
   CREATE INDEX IX_MaruPartnerTermAgreements_UserUid ON dbo.MaruPartnerTermAgreements(user_uid);
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerTermAgreements', 'term_scope') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerTermAgreements ADD term_scope NVARCHAR(50) NOT NULL DEFAULT 'funeral_member';
 END;
 
 IF NOT EXISTS (SELECT 1 FROM dbo.MaruPartnerTerms WHERE type = 'service_terms')
