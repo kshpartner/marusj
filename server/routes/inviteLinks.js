@@ -8,7 +8,7 @@ router.get("/", async (req, res, next) => {
     if (!hasDatabaseConfig()) {
       return res.json({
         links: [
-          { id: 1, name: "기본 가입 링크", refUid: "sales_001", clicks: 248, signups: 31, status: "active" },
+          { id: 1, name: "기본 상조 약관 링크", refUid: "sales_001", clicks: 248, signups: 31, status: "active" },
           { id: 2, name: "5월 캠페인", refUid: "sales_003", clicks: 91, signups: 12, status: "active" },
         ],
       });

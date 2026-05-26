@@ -32,11 +32,11 @@
           </button>
           <button class="menu-item" data-view="links" type="button">
             <span class="menu-icon">↗</span>
-            가입 링크
+            상조 약관 링크
           </button>
           <button class="menu-item" data-view="service" type="button">
             <span class="menu-icon">✓</span>
-            서비스 가입
+            상조 회원
           </button>
           <button class="menu-item" data-view="commission" type="button">
             <span class="menu-icon">₩</span>
@@ -64,7 +64,7 @@
             <h2 id="viewTitle">대시보드</h2>
           </div>
           <div class="topbar-actions">
-            <button class="ghost-button" id="copyInviteButton" type="button">가입 링크 복사</button>
+            <button class="ghost-button" id="copyInviteButton" type="button">상조 약관 링크 복사</button>
             <button class="outline-button" id="logoutButton" type="button">로그아웃</button>
           </div>
         </header>
@@ -100,9 +100,9 @@
                 <button class="text-button" data-view-jump="tree" type="button">트리 보기</button>
               </div>
               <div class="timeline">
-                <div><strong>customer_1048</strong><span>sales_001 가입 링크로 등록</span><time>10분 전</time></div>
+                <div><strong>member_1048</strong><span>sales_001 상조 약관 링크로 등록</span><time>10분 전</time></div>
                 <div><strong>sales_008</strong><span>admin 하위 영업사원으로 승인</span><time>1시간 전</time></div>
-                <div><strong>customer_1047</strong><span>개인정보 활용 동의 완료</span><time>2시간 전</time></div>
+                <div><strong>member_1047</strong><span>개인정보 활용 동의 완료</span><time>2시간 전</time></div>
               </div>
             </section>
 
@@ -113,7 +113,7 @@
               <ul class="rule-list">
                 <li>admin은 전체 하위 구조 조회</li>
                 <li>영업사원은 자기 하위 회원만 조회</li>
-                <li>가입 링크의 ref UID로 자동 배치</li>
+                <li>상조 약관 링크의 ref UID로 자동 배치</li>
               </ul>
             </section>
           </div>
@@ -133,12 +133,12 @@
                     <li>
                       <button class="tree-node sales-node" type="button">sales_001 <span>영업사원</span></button>
                       <ul>
-                        <li><button class="tree-node customer-node" type="button">customer_1001 <span>서비스 가입</span></button></li>
-                        <li><button class="tree-node customer-node" type="button">customer_1002 <span>가입 대기</span></button></li>
+                        <li><button class="tree-node customer-node" type="button">member_1001 <span>상조 가입</span></button></li>
+                        <li><button class="tree-node customer-node" type="button">member_1002 <span>동의 대기</span></button></li>
                         <li>
                           <button class="tree-node sales-node" type="button">sales_002 <span>하위 영업</span></button>
                           <ul>
-                            <li><button class="tree-node customer-node" type="button">customer_1003 <span>서비스 가입</span></button></li>
+                            <li><button class="tree-node customer-node" type="button">member_1003 <span>상조 가입</span></button></li>
                           </ul>
                         </li>
                       </ul>
@@ -146,7 +146,7 @@
                     <li>
                       <button class="tree-node sales-node" type="button">sales_003 <span>영업사원</span></button>
                       <ul>
-                        <li><button class="tree-node customer-node" type="button">customer_1004 <span>서비스 가입</span></button></li>
+                        <li><button class="tree-node customer-node" type="button">member_1004 <span>상조 가입</span></button></li>
                       </ul>
                     </li>
                   </ul>
@@ -175,8 +175,8 @@
                 </thead>
                 <tbody>
                   <tr><td>sales_001</td><td>김파트너</td><td>영업사원</td><td>admin</td><td>활성</td></tr>
-                  <tr><td>customer_1001</td><td>이고객</td><td>고객</td><td>sales_001</td><td>서비스 가입</td></tr>
-                  <tr><td>customer_1002</td><td>박고객</td><td>고객</td><td>sales_001</td><td>가입 대기</td></tr>
+                  <tr><td>member_1001</td><td>이고객</td><td>상조 회원</td><td>sales_001</td><td>상조 가입</td></tr>
+                  <tr><td>member_1002</td><td>박고객</td><td>상조 회원</td><td>sales_001</td><td>동의 대기</td></tr>
                 </tbody>
               </table>
             </div>
@@ -186,7 +186,7 @@
         <section class="view" id="linksView">
           <div class="panel">
             <div class="panel-heading">
-              <h3>가입 링크 생성</h3>
+              <h3>상조 약관 링크 생성</h3>
               <button class="primary-button compact" id="createLinkButton" type="button">새 링크 생성</button>
             </div>
             <div class="link-builder">
@@ -195,7 +195,7 @@
                 <input id="refUid" type="text" value="sales_001" />
               </label>
               <label>
-                가입 링크
+                상조 약관 링크
                 <input id="inviteUrl" type="text" readonly />
               </label>
               <button class="outline-button" id="copyBuiltLinkButton" type="button">복사</button>
@@ -212,7 +212,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>기본 가입 링크</td><td>sales_001</td><td>248</td><td>31</td><td>사용중</td></tr>
+                  <tr><td>기본 상조 약관 링크</td><td>sales_001</td><td>248</td><td>31</td><td>사용중</td></tr>
                   <tr><td>5월 캠페인</td><td>sales_003</td><td>91</td><td>12</td><td>사용중</td></tr>
                 </tbody>
               </table>
@@ -223,11 +223,11 @@
         <section class="view" id="serviceView">
           <div class="panel">
             <div class="panel-heading">
-              <h3>서비스 가입 신청</h3>
+              <h3>상조 회원 가입 신청</h3>
             </div>
             <div class="empty-state">
               <strong>가입 페이지는 추천 UID를 기준으로 회원을 자동 연결합니다.</strong>
-              <span>/signup?ref=sales_001 형태의 링크에서 약관 동의와 개인정보 활용 동의를 받은 뒤 신청을 저장합니다.</span>
+              <span>/signup.html?ref=sales_001 형태의 링크에서 약관 동의와 개인정보 활용 동의를 받은 뒤 상조 회원으로 저장합니다.</span>
             </div>
           </div>
         </section>

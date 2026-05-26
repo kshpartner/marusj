@@ -1,6 +1,11 @@
-IF NOT EXISTS (SELECT 1 FROM sys.sequences WHERE name = 'MaruPartnerCustomerUidSeq' AND SCHEMA_NAME(schema_id) = 'dbo')
+IF NOT EXISTS (SELECT 1 FROM sys.sequences WHERE name = 'MaruPartnerSalesUidSeq' AND SCHEMA_NAME(schema_id) = 'dbo')
 BEGIN
-  EXEC('CREATE SEQUENCE dbo.MaruPartnerCustomerUidSeq AS INT START WITH 1001 INCREMENT BY 1');
+  EXEC('CREATE SEQUENCE dbo.MaruPartnerSalesUidSeq AS INT START WITH 1 INCREMENT BY 1');
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.sequences WHERE name = 'MaruPartnerMemberUidSeq' AND SCHEMA_NAME(schema_id) = 'dbo')
+BEGIN
+  EXEC('CREATE SEQUENCE dbo.MaruPartnerMemberUidSeq AS INT START WITH 1001 INCREMENT BY 1');
 END;
 
 IF OBJECT_ID('dbo.MaruPartnerUsers', 'U') IS NULL
@@ -21,6 +26,26 @@ BEGIN
   );
 
   CREATE INDEX IX_MaruPartnerUsers_ParentUid ON dbo.MaruPartnerUsers(parent_uid);
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'terms_yn') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD terms_yn CHAR(1) NULL;
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'privacy_yn') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD privacy_yn CHAR(1) NULL;
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'marketing_yn') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD marketing_yn CHAR(1) NULL;
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'signup_source') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD signup_source NVARCHAR(50) NULL;
 END;
 
 IF NOT EXISTS (SELECT 1 FROM dbo.MaruPartnerUsers WHERE uid = 'admin')

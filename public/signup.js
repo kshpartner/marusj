@@ -46,7 +46,7 @@ signupForm.addEventListener("submit", async (event) => {
     }
 
     signupForm.reset();
-    signupRefUid.value = result.signup.parentUid;
+    signupRefUid.value = result.member.parentUid;
     signupMessage.textContent = "가입 신청이 완료되었습니다.";
     signupMessage.classList.remove("error");
     showToast("가입 신청이 완료되었습니다.");

@@ -313,6 +313,18 @@ input:focus {
   font-weight: 800;
 }
 
+.form-link {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  text-decoration: none;
+}
+
+.form-link:hover {
+  text-decoration: underline;
+}
+
 .agreement-box {
   display: grid;
   gap: 10px;

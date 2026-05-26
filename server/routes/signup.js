@@ -13,9 +13,9 @@ router.post("/", async (req, res, next) => {
   try {
     if (!hasDatabaseConfig()) {
       return res.status(201).json({
-        signup: {
+        member: {
           id: Date.now(),
-          uid: `customer_${Date.now()}`,
+          uid: `member_${Date.now()}`,
           parentUid: refUid,
           name,
           phone,
@@ -32,13 +32,22 @@ router.post("/", async (req, res, next) => {
       .input("name", sql.NVarChar, name)
       .input("phone", sql.NVarChar, phone)
       .input("email", sql.NVarChar, email || null)
+      .input("termsYn", sql.Char, agreedTerms ? "Y" : "N")
+      .input("privacyYn", sql.Char, agreedPrivacy ? "Y" : "N")
       .query(`
-        INSERT INTO dbo.MaruPartnerUsers (uid, username, name, phone, email, role, parent_uid, status)
+        INSERT INTO dbo.MaruPartnerUsers (
+          uid, username, name, phone, email, role, parent_uid, status,
+          terms_yn, privacy_yn, signup_source
+        )
         OUTPUT INSERTED.id, INSERTED.uid, INSERTED.parent_uid AS parentUid, INSERTED.name, INSERTED.phone, INSERTED.email, INSERTED.status
-        VALUES (CONCAT('customer_', NEXT VALUE FOR dbo.MaruPartnerCustomerUidSeq), @phone, @name, @phone, @email, 'customer', @refUid, 'pending')
+        VALUES (
+          CONCAT('member_', NEXT VALUE FOR dbo.MaruPartnerMemberUidSeq),
+          @phone, @name, @phone, @email, 'funeral_member', @refUid, 'pending',
+          @termsYn, @privacyYn, 'sales_terms_link'
+        )
       `);
 
-    return res.status(201).json({ signup: result.recordset[0] });
+    return res.status(201).json({ member: result.recordset[0] });
   } catch (error) {
     next(error);
   }

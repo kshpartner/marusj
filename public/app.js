@@ -16,8 +16,8 @@ const viewLabels = {
   dashboard: "대시보드",
   tree: "조직 트리",
   members: "회원 관리",
-  links: "가입 링크",
-  service: "서비스 가입",
+  links: "상조 약관 링크",
+  service: "상조 회원",
   commission: "커미션",
   settlement: "정산 관리",
   terms: "약관 관리",
@@ -71,19 +71,19 @@ async function createInviteLink() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: "가입 링크",
+        name: "상조 약관 링크",
         refUid: uid,
       }),
     });
 
     if (!response.ok) {
       const result = await response.json();
-      showToast(result.message || "가입 링크 생성에 실패했습니다.");
+      showToast(result.message || "상조 약관 링크 생성에 실패했습니다.");
       return;
     }
 
     updateInviteUrl();
-    showToast("가입 링크가 생성되었습니다.");
+    showToast("상조 약관 링크가 생성되었습니다.");
   } catch {
     showToast("API 서버 실행 상태를 확인해주세요.");
   }
@@ -107,12 +107,12 @@ document.querySelector("#createLinkButton").addEventListener("click", createInvi
 
 document.querySelector("#copyBuiltLinkButton").addEventListener("click", () => {
   updateInviteUrl();
-  copyText(inviteUrl.value, "가입 링크를 복사했습니다.");
+  copyText(inviteUrl.value, "상조 약관 링크를 복사했습니다.");
 });
 
 document.querySelector("#copyInviteButton").addEventListener("click", () => {
   updateInviteUrl();
-  copyText(inviteUrl.value, "기본 가입 링크를 복사했습니다.");
+  copyText(inviteUrl.value, "기본 상조 약관 링크를 복사했습니다.");
 });
 
 refUid.addEventListener("input", updateInviteUrl);

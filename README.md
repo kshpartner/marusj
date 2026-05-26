@@ -30,6 +30,7 @@ Copy-Item .env.example .env
 ```text
 GET  /api/health
 POST /api/auth/login
+POST /api/sales/register
 GET  /api/members
 GET  /api/members/tree
 GET  /api/invite-links

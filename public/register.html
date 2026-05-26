@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>영업사원 회원가입 | MaRu Partner Admin</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="signup-shell">
+      <section class="signup-panel">
+        <div class="brand-lockup">
+          <div class="brand-mark">M</div>
+          <div>
+            <p class="eyebrow">영업사원 회원가입</p>
+            <h1>MaRu Partner Admin</h1>
+          </div>
+        </div>
+
+        <form id="salesRegisterForm" class="login-form">
+          <label>
+            아이디
+            <input id="salesUsername" type="text" autocomplete="username" required />
+          </label>
+          <label>
+            비밀번호
+            <input id="salesPassword" type="password" autocomplete="new-password" required />
+          </label>
+          <label>
+            이름
+            <input id="salesName" type="text" autocomplete="name" required />
+          </label>
+          <label>
+            연락처
+            <input id="salesPhone" type="tel" autocomplete="tel" required />
+          </label>
+          <label>
+            이메일
+            <input id="salesEmail" type="email" autocomplete="email" />
+          </label>
+
+          <div class="agreement-box">
+            <label class="check-label">
+              <input id="salesAgreeTerms" type="checkbox" required />
+              파트너 이용약관에 동의합니다.
+            </label>
+            <label class="check-label">
+              <input id="salesAgreePrivacy" type="checkbox" required />
+              개인정보 수집 및 이용에 동의합니다.
+            </label>
+          </div>
+
+          <button class="primary-button" type="submit">회원가입</button>
+          <p id="salesRegisterMessage" class="form-note">가입한 영업사원은 admin 하위로 등록됩니다.</p>
+          <a class="form-link" href="./login.html">로그인으로 돌아가기</a>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./register.js"></script>
+  </body>
+</html>
