@@ -123,35 +123,10 @@
           <div class="panel">
             <div class="panel-heading">
               <h3>조직 트리</h3>
-              <input class="search-input" type="search" placeholder="이름, UID, 연락처 검색" />
+              <input id="treeSearchInput" class="search-input" type="search" placeholder="이름, UID, 연락처 검색" />
             </div>
-            <div class="tree-board">
-              <ul class="tree">
-                <li>
-                  <button class="tree-node admin-node" type="button">admin <span>전체 관리자</span></button>
-                  <ul>
-                    <li>
-                      <button class="tree-node sales-node" type="button">sales_001 <span>영업사원</span></button>
-                      <ul>
-                        <li><button class="tree-node customer-node" type="button">member_1001 <span>상조 가입</span></button></li>
-                        <li><button class="tree-node customer-node" type="button">member_1002 <span>동의 대기</span></button></li>
-                        <li>
-                          <button class="tree-node sales-node" type="button">sales_002 <span>하위 영업</span></button>
-                          <ul>
-                            <li><button class="tree-node customer-node" type="button">member_1003 <span>상조 가입</span></button></li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <button class="tree-node sales-node" type="button">sales_003 <span>영업사원</span></button>
-                      <ul>
-                        <li><button class="tree-node customer-node" type="button">member_1004 <span>상조 가입</span></button></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+            <div id="treeBoard" class="tree-board">
+              <div class="tree-loading">조직 트리를 불러오는 중입니다.</div>
             </div>
           </div>
         </section>

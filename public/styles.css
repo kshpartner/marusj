@@ -534,6 +534,17 @@ input:focus {
   padding: 12px 0 4px;
 }
 
+.tree-loading {
+  display: grid;
+  min-height: 120px;
+  place-items: center;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-weight: 800;
+}
+
 .tree,
 .tree ul {
   position: relative;
