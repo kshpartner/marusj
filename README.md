@@ -38,11 +38,16 @@ POST /api/invite-links
 POST /api/signup
 GET  /api/terms
 GET  /api/terms/active
-POST /api/terms
-PATCH /api/terms/:id/activate
+PUT  /api/terms/:type
 GET  /api/terms/agreements
 ```
 
 ## MSSQL
 
 초기 테이블 예시는 `server/schema.sql`에 있습니다.
+
+약관 3종 기본 문안을 다시 채우려면 아래 명령을 사용합니다.
+
+```powershell
+npm run seed:terms
+```

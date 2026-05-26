@@ -21,6 +21,7 @@ const refreshTermsButton = document.querySelector("#refreshTermsButton");
 let treeMembers = [];
 let treeLoaded = false;
 let termsLoaded = false;
+let currentTerms = [];
 
 const viewLabels = {
   dashboard: "대시보드",
@@ -252,6 +253,7 @@ function getTermTypeLabel(type) {
 }
 
 function renderTerms(terms) {
+  currentTerms = terms;
   termsList.replaceChildren();
 
   if (!terms.length) {
@@ -269,25 +271,32 @@ function renderTerms(terms) {
     const meta = document.createElement("span");
     const content = document.createElement("p");
     const actions = document.createElement("div");
-    const activateButton = document.createElement("button");
+    const editButton = document.createElement("button");
 
     item.className = "term-item";
     heading.className = "term-item-heading";
     title.textContent = `${term.title} v${term.version}`;
-    meta.textContent = `${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"} · ${term.activeYn === "Y" ? "활성" : "비활성"}`;
+    meta.textContent = `${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"}`;
     content.textContent = term.content;
     actions.className = "term-item-actions";
-    activateButton.type = "button";
-    activateButton.className = "outline-button compact-action";
-    activateButton.textContent = "활성화";
-    activateButton.disabled = term.activeYn === "Y";
-    activateButton.addEventListener("click", () => activateTerm(term.id));
+    editButton.type = "button";
+    editButton.className = "outline-button compact-action";
+    editButton.textContent = "수정";
+    editButton.addEventListener("click", () => fillTermForm(term));
 
     heading.append(title, meta);
-    actions.append(activateButton);
+    actions.append(editButton);
     item.append(heading, content, actions);
     termsList.append(item);
   });
+}
+
+function fillTermForm(term) {
+  document.querySelector("#termType").value = term.type;
+  document.querySelector("#termTitle").value = term.title;
+  document.querySelector("#termVersion").value = term.version;
+  document.querySelector("#termContent").value = term.content;
+  document.querySelector("#termRequired").checked = term.requiredYn === "Y";
 }
 
 function renderAgreements(agreements) {
@@ -328,6 +337,9 @@ async function loadTerms() {
     renderTerms(termsResult.terms || []);
     renderAgreements(agreementsResult.agreements || []);
     termsLoaded = true;
+    if ((termsResult.terms || []).length) {
+      fillTermForm(termsResult.terms[0]);
+    }
   } catch {
     showToast("약관 정보를 불러오지 못했습니다.");
   }
@@ -342,12 +354,11 @@ async function saveTerm(event) {
     version: document.querySelector("#termVersion").value.trim(),
     content: document.querySelector("#termContent").value.trim(),
     requiredYn: document.querySelector("#termRequired").checked ? "Y" : "N",
-    activeYn: document.querySelector("#termActive").checked ? "Y" : "N",
   };
 
   try {
-    const response = await fetch("/api/terms", {
-      method: "POST",
+    const response = await fetch(`/api/terms/${encodeURIComponent(payload.type)}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -360,33 +371,10 @@ async function saveTerm(event) {
       return;
     }
 
-    termForm.reset();
-    document.querySelector("#termVersion").value = "1.0";
-    document.querySelector("#termRequired").checked = true;
-    document.querySelector("#termActive").checked = true;
-    showToast("약관이 저장되었습니다.");
+    showToast("약관이 수정되었습니다.");
     await loadTerms();
   } catch {
     showToast("약관 저장 중 오류가 발생했습니다.");
-  }
-}
-
-async function activateTerm(termId) {
-  try {
-    const response = await fetch(`/api/terms/${termId}/activate`, {
-      method: "PATCH",
-    });
-
-    if (!response.ok) {
-      const result = await response.json();
-      showToast(result.message || "약관 활성화에 실패했습니다.");
-      return;
-    }
-
-    showToast("약관이 활성화되었습니다.");
-    await loadTerms();
-  } catch {
-    showToast("약관 활성화 중 오류가 발생했습니다.");
   }
 }
 
@@ -418,6 +406,12 @@ document.querySelector("#copyInviteButton").addEventListener("click", () => {
 
 termForm.addEventListener("submit", saveTerm);
 refreshTermsButton.addEventListener("click", loadTerms);
+document.querySelector("#termType").addEventListener("change", (event) => {
+  const term = currentTerms.find((item) => item.type === event.target.value);
+  if (term) {
+    fillTermForm(term);
+  }
+});
 treeSearchInput.addEventListener("input", renderTree);
 refUid.addEventListener("input", updateInviteUrl);
 updateInviteUrl();

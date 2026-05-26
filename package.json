@@ -6,7 +6,8 @@
   "main": "server/app.js",
   "scripts": {
     "start": "node server/app.js",
-    "dev": "node server/app.js"
+    "dev": "node server/app.js",
+    "seed:terms": "node scripts/seedTerms.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
