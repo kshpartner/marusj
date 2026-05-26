@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#126c65" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="MaRu Admin" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>로그인 | MaRu Partner Admin</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,9 +19,9 @@
           <span class="node node-admin">admin</span>
           <span class="node node-sales-a">sales_001</span>
           <span class="node node-sales-b">sales_002</span>
-          <span class="node node-customer-a">customer</span>
-          <span class="node node-customer-b">customer</span>
-          <span class="node node-customer-c">customer</span>
+          <span class="node node-customer-a">member</span>
+          <span class="node node-customer-b">member</span>
+          <span class="node node-customer-c">member</span>
           <span class="line line-a"></span>
           <span class="line line-b"></span>
           <span class="line line-c"></span>
@@ -46,10 +52,19 @@
           <p id="loginMessage" class="form-note">초기 계정: admin / 1</p>
           <a class="form-link" href="./register.html">영업사원 회원가입</a>
         </form>
+
+        <section id="installBox" class="install-box" hidden>
+          <div>
+            <strong>앱처럼 빠르게 접속하기</strong>
+            <p id="installGuide">홈 화면에 설치하면 브라우저 주소 입력 없이 바로 열 수 있습니다.</p>
+          </div>
+          <button id="installAppButton" class="outline-button" type="button" hidden>홈 화면에 설치</button>
+        </section>
       </section>
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="./login.js"></script>
+    <script src="./install.js"></script>
   </body>
 </html>

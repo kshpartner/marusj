@@ -337,6 +337,34 @@ textarea:focus {
   text-decoration: underline;
 }
 
+.install-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--surface-muted);
+}
+
+.install-box[hidden] {
+  display: none;
+}
+
+.install-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.install-box p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .agreement-box {
   display: grid;
   gap: 10px;
@@ -851,5 +879,10 @@ th {
 
   .login-panel {
     padding: 24px;
+  }
+
+  .install-box {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
