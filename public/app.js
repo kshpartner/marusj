@@ -54,6 +54,12 @@ const roleLabels = {
   customer: "상조 회원",
 };
 
+const genderLabels = {
+  male: "남성",
+  female: "여성",
+  other: "기타",
+};
+
 function applyPermissions() {
   document.querySelectorAll('[data-view="terms"]').forEach((item) => {
     item.hidden = !isAdmin;
@@ -273,7 +279,7 @@ function renderMembers(members) {
   if (!members.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 6;
+    cell.colSpan = 9;
     cell.textContent = "회원 목록이 없습니다.";
     row.append(cell);
     membersTableBody.append(row);
@@ -282,7 +288,17 @@ function renderMembers(members) {
 
   members.forEach((member) => {
     const row = document.createElement("tr");
-    [member.uid, member.name, member.phone || "-", roleLabels[member.role] || member.role, member.parentUid || "-", member.status].forEach(
+    [
+      member.uid,
+      member.name,
+      member.phone || "-",
+      member.age || "-",
+      genderLabels[member.gender] || member.gender || "-",
+      member.region || "-",
+      roleLabels[member.role] || member.role,
+      member.parentUid || "-",
+      member.status,
+    ].forEach(
       (value) => {
         const cell = document.createElement("td");
         cell.textContent = value || "";

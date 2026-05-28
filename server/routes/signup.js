@@ -4,9 +4,33 @@ const { getPool, hasDatabaseConfig, sql } = require("../db");
 const router = express.Router();
 
 router.post("/", async (req, res, next) => {
-  const { refUid, name, phone, email, agreedTerms, agreedPrivacy, agreedMarketing = false } = req.body;
+  const {
+    refUid,
+    name,
+    phone,
+    age,
+    gender,
+    region,
+    email,
+    agreedTerms,
+    agreedPrivacy,
+    agreedMarketing = false,
+  } = req.body;
 
-  if (!refUid || !name || !phone || !agreedTerms || !agreedPrivacy) {
+  const parsedAge = Number(age);
+
+  if (
+    !refUid ||
+    !name ||
+    !phone ||
+    !Number.isInteger(parsedAge) ||
+    parsedAge < 1 ||
+    parsedAge > 120 ||
+    !gender ||
+    !region ||
+    !agreedTerms ||
+    !agreedPrivacy
+  ) {
     return res.status(400).json({ message: "필수 가입 정보를 확인해주세요." });
   }
 
@@ -19,6 +43,9 @@ router.post("/", async (req, res, next) => {
           parentUid: refUid,
           name,
           phone,
+          age: parsedAge,
+          gender,
+          region,
           email,
           status: "pending",
         },
@@ -38,7 +65,7 @@ router.post("/", async (req, res, next) => {
       `);
 
     if (!parent.recordset[0]) {
-      return res.status(400).json({ message: "상조 회원은 admin 또는 영업사원 하위로만 가입할 수 있습니다." });
+      return res.status(400).json({ message: "상조 회원은 admin 또는 영업사원 링크로만 가입할 수 있습니다." });
     }
 
     const activeTerms = await pool.request().query(`
@@ -73,19 +100,23 @@ router.post("/", async (req, res, next) => {
         .input("refUid", sql.NVarChar, refUid)
         .input("name", sql.NVarChar, name)
         .input("phone", sql.NVarChar, phone)
+        .input("age", sql.Int, parsedAge)
+        .input("gender", sql.NVarChar, gender)
+        .input("region", sql.NVarChar, region)
         .input("email", sql.NVarChar, email || null)
         .input("termsYn", sql.Char, agreedTerms ? "Y" : "N")
         .input("privacyYn", sql.Char, agreedPrivacy ? "Y" : "N")
         .input("marketingYn", sql.Char, agreedMarketing ? "Y" : "N")
         .query(`
           INSERT INTO dbo.MaruPartnerUsers (
-            uid, username, name, phone, email, role, parent_uid, status,
+            uid, username, name, phone, age, gender, region, email, role, parent_uid, status,
             terms_yn, privacy_yn, marketing_yn, signup_source
           )
-          OUTPUT INSERTED.id, INSERTED.uid, INSERTED.parent_uid AS parentUid, INSERTED.name, INSERTED.phone, INSERTED.email, INSERTED.status
+          OUTPUT INSERTED.id, INSERTED.uid, INSERTED.parent_uid AS parentUid, INSERTED.name,
+                 INSERTED.phone, INSERTED.age, INSERTED.gender, INSERTED.region, INSERTED.email, INSERTED.status
           VALUES (
             CONCAT('member_', NEXT VALUE FOR dbo.MaruPartnerMemberUidSeq),
-            @phone, @name, @phone, @email, 'funeral_member', @refUid, 'pending',
+            @phone, @name, @phone, @age, @gender, @region, @email, 'funeral_member', @refUid, 'pending',
             @termsYn, @privacyYn, @marketingYn, 'terms_link'
           )
         `);
@@ -114,7 +145,7 @@ router.post("/", async (req, res, next) => {
           .input("ip", sql.NVarChar, ip)
           .input("userAgent", sql.NVarChar, userAgent)
           .query(`
-          INSERT INTO dbo.MaruPartnerTermAgreements (
+            INSERT INTO dbo.MaruPartnerTermAgreements (
               user_uid, term_id, term_scope, term_type, term_title, term_version, agreed_yn, ip, user_agent
             )
             VALUES (@userUid, @termId, 'funeral_member', @termType, @termTitle, @termVersion, @agreedYn, @ip, @userAgent)

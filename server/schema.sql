@@ -53,6 +53,21 @@ BEGIN
   ALTER TABLE dbo.MaruPartnerUsers ADD signup_source NVARCHAR(50) NULL;
 END;
 
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'age') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD age INT NULL;
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'gender') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD gender NVARCHAR(20) NULL;
+END;
+
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'region') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD region NVARCHAR(100) NULL;
+END;
+
 IF NOT EXISTS (SELECT 1 FROM dbo.MaruPartnerUsers WHERE uid = 'admin')
 BEGIN
   INSERT INTO dbo.MaruPartnerUsers (uid, username, password, name, role, parent_uid, status)

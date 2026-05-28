@@ -2,6 +2,9 @@ const signupForm = document.querySelector("#signupForm");
 const signupRefUid = document.querySelector("#signupRefUid");
 const signupName = document.querySelector("#signupName");
 const signupPhone = document.querySelector("#signupPhone");
+const signupAge = document.querySelector("#signupAge");
+const signupGender = document.querySelector("#signupGender");
+const signupRegion = document.querySelector("#signupRegion");
 const signupEmail = document.querySelector("#signupEmail");
 const agreeTerms = document.querySelector("#agreeTerms");
 const agreePrivacy = document.querySelector("#agreePrivacy");
@@ -73,6 +76,9 @@ signupForm.addEventListener("submit", async (event) => {
         refUid: signupRefUid.value,
         name: signupName.value.trim(),
         phone: signupPhone.value.trim(),
+        age: Number(signupAge.value),
+        gender: signupGender.value,
+        region: signupRegion.value.trim(),
         email: signupEmail.value.trim(),
         agreedTerms: agreeTerms.checked,
         agreedPrivacy: agreePrivacy.checked,
