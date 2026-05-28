@@ -273,7 +273,7 @@ function renderMembers(members) {
   if (!members.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 5;
+    cell.colSpan = 6;
     cell.textContent = "회원 목록이 없습니다.";
     row.append(cell);
     membersTableBody.append(row);
@@ -282,7 +282,7 @@ function renderMembers(members) {
 
   members.forEach((member) => {
     const row = document.createElement("tr");
-    [member.uid, member.name, roleLabels[member.role] || member.role, member.parentUid || "-", member.status].forEach(
+    [member.uid, member.name, member.phone || "-", roleLabels[member.role] || member.role, member.parentUid || "-", member.status].forEach(
       (value) => {
         const cell = document.createElement("td");
         cell.textContent = value || "";
