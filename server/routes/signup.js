@@ -8,7 +8,7 @@ router.post("/", async (req, res, next) => {
     refUid,
     name,
     phone,
-    age,
+    birthDate,
     gender,
     region,
     email,
@@ -17,15 +17,13 @@ router.post("/", async (req, res, next) => {
     agreedMarketing = false,
   } = req.body;
 
-  const parsedAge = Number(age);
+  const normalizedBirthDate = String(birthDate || "").trim();
 
   if (
     !refUid ||
     !name ||
     !phone ||
-    !Number.isInteger(parsedAge) ||
-    parsedAge < 1 ||
-    parsedAge > 120 ||
+    !/^\d{8}$/.test(normalizedBirthDate) ||
     !gender ||
     !region ||
     !agreedTerms ||
@@ -43,7 +41,7 @@ router.post("/", async (req, res, next) => {
           parentUid: refUid,
           name,
           phone,
-          age: parsedAge,
+          birthDate: normalizedBirthDate,
           gender,
           region,
           email,
@@ -100,7 +98,7 @@ router.post("/", async (req, res, next) => {
         .input("refUid", sql.NVarChar, refUid)
         .input("name", sql.NVarChar, name)
         .input("phone", sql.NVarChar, phone)
-        .input("age", sql.Int, parsedAge)
+        .input("birthDate", sql.NVarChar, normalizedBirthDate)
         .input("gender", sql.NVarChar, gender)
         .input("region", sql.NVarChar, region)
         .input("email", sql.NVarChar, email || null)
@@ -109,14 +107,14 @@ router.post("/", async (req, res, next) => {
         .input("marketingYn", sql.Char, agreedMarketing ? "Y" : "N")
         .query(`
           INSERT INTO dbo.MaruPartnerUsers (
-            uid, username, name, phone, age, gender, region, email, role, parent_uid, status,
+            uid, username, name, phone, birth_date, gender, region, email, role, parent_uid, status,
             terms_yn, privacy_yn, marketing_yn, signup_source
           )
           OUTPUT INSERTED.id, INSERTED.uid, INSERTED.parent_uid AS parentUid, INSERTED.name,
-                 INSERTED.phone, INSERTED.age, INSERTED.gender, INSERTED.region, INSERTED.email, INSERTED.status
+                 INSERTED.phone, INSERTED.birth_date AS birthDate, INSERTED.gender, INSERTED.region, INSERTED.email, INSERTED.status
           VALUES (
             CONCAT('member_', NEXT VALUE FOR dbo.MaruPartnerMemberUidSeq),
-            @phone, @name, @phone, @age, @gender, @region, @email, 'funeral_member', @refUid, 'pending',
+            @phone, @name, @phone, @birthDate, @gender, @region, @email, 'funeral_member', @refUid, 'pending',
             @termsYn, @privacyYn, @marketingYn, 'terms_link'
           )
         `);

@@ -12,7 +12,7 @@ const demoMembers = [
     uid: "member_1001",
     name: "이고객",
     phone: "01011112222",
-    age: 45,
+    birthDate: "19800101",
     gender: "male",
     region: "서울 강남구",
     role: "funeral_member",
@@ -24,7 +24,7 @@ const demoMembers = [
     uid: "member_1002",
     name: "박고객",
     phone: "01033334444",
-    age: 52,
+    birthDate: "19750202",
     gender: "female",
     region: "부산 해운대구",
     role: "funeral_member",
@@ -34,7 +34,7 @@ const demoMembers = [
 ];
 
 const userSelect = `
-  id, uid, username, name, phone, age, gender, region, email, role,
+  id, uid, username, name, phone, age, birth_date AS birthDate, gender, region, email, role,
   parent_uid AS parentUid, status
 `;
 
@@ -156,7 +156,7 @@ router.get("/tree", async (req, res, next) => {
       .input("rootUid", sql.NVarChar, rootUid)
       .query(`
         WITH UserTree AS (
-          SELECT id, uid, username, name, phone, age, gender, region, email, role,
+          SELECT id, uid, username, name, phone, age, birth_date AS birthDate, gender, region, email, role,
                  parent_uid AS parentUid, status, 0 AS depth
           FROM dbo.MaruPartnerUsers
           WHERE uid = @rootUid
@@ -164,12 +164,12 @@ router.get("/tree", async (req, res, next) => {
           UNION ALL
 
           SELECT child.id, child.uid, child.username, child.name, child.phone, child.age,
-                 child.gender, child.region, child.email, child.role,
+                 child.birth_date AS birthDate, child.gender, child.region, child.email, child.role,
                  child.parent_uid AS parentUid, child.status, parent.depth + 1
           FROM dbo.MaruPartnerUsers child
           INNER JOIN UserTree parent ON child.parent_uid = parent.uid
         )
-        SELECT id, uid, username, name, phone, age, gender, region, email, role, parentUid, status, depth
+        SELECT id, uid, username, name, phone, age, birthDate, gender, region, email, role, parentUid, status, depth
         FROM UserTree
         ORDER BY depth ASC, id ASC
       `);

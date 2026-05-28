@@ -339,7 +339,7 @@ function renderMembers(members) {
       member.uid,
       member.name,
       member.phone || "-",
-      member.age || "-",
+      member.birthDate || member.birth_date || "-",
       genderLabels[member.gender] || member.gender || "-",
       member.region || "-",
       roleLabels[member.role] || member.role,

@@ -58,6 +58,11 @@ BEGIN
   ALTER TABLE dbo.MaruPartnerUsers ADD age INT NULL;
 END;
 
+IF COL_LENGTH('dbo.MaruPartnerUsers', 'birth_date') IS NULL
+BEGIN
+  ALTER TABLE dbo.MaruPartnerUsers ADD birth_date NVARCHAR(8) NULL;
+END;
+
 IF COL_LENGTH('dbo.MaruPartnerUsers', 'gender') IS NULL
 BEGIN
   ALTER TABLE dbo.MaruPartnerUsers ADD gender NVARCHAR(20) NULL;
