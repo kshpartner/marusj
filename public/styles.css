@@ -681,6 +681,11 @@ textarea:focus {
   background: #f0fbfa;
 }
 
+.center-node {
+  border-color: #a8b6f0;
+  background: #f3f5ff;
+}
+
 .customer-node {
   border-color: #cbd5e1;
 }

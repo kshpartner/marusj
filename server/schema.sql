@@ -3,6 +3,11 @@ BEGIN
   EXEC('CREATE SEQUENCE dbo.MaruPartnerSalesUidSeq AS INT START WITH 1 INCREMENT BY 1');
 END;
 
+IF NOT EXISTS (SELECT 1 FROM sys.sequences WHERE name = 'MaruPartnerCenterUidSeq' AND SCHEMA_NAME(schema_id) = 'dbo')
+BEGIN
+  EXEC('CREATE SEQUENCE dbo.MaruPartnerCenterUidSeq AS INT START WITH 1 INCREMENT BY 1');
+END;
+
 IF NOT EXISTS (SELECT 1 FROM sys.sequences WHERE name = 'MaruPartnerMemberUidSeq' AND SCHEMA_NAME(schema_id) = 'dbo')
 BEGIN
   EXEC('CREATE SEQUENCE dbo.MaruPartnerMemberUidSeq AS INT START WITH 1001 INCREMENT BY 1');

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MaRu Partner Admin</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -18,42 +19,15 @@
         </div>
 
         <nav class="menu-list">
-          <button class="menu-item active" data-view="dashboard" type="button">
-            <span class="menu-icon">⌂</span>
-            대시보드
-          </button>
-          <button class="menu-item" data-view="tree" type="button">
-            <span class="menu-icon">◇</span>
-            조직 트리
-          </button>
-          <button class="menu-item" data-view="members" type="button">
-            <span class="menu-icon">◎</span>
-            회원 관리
-          </button>
-          <button class="menu-item" data-view="links" type="button">
-            <span class="menu-icon">↗</span>
-            상조 약관 링크
-          </button>
-          <button class="menu-item" data-view="service" type="button">
-            <span class="menu-icon">✓</span>
-            상조 회원
-          </button>
-          <button class="menu-item" data-view="commission" type="button">
-            <span class="menu-icon">₩</span>
-            커미션
-          </button>
-          <button class="menu-item" data-view="settlement" type="button">
-            <span class="menu-icon">≡</span>
-            정산 관리
-          </button>
-          <button class="menu-item" data-view="terms" type="button">
-            <span class="menu-icon">§</span>
-            약관 관리
-          </button>
-          <button class="menu-item" data-view="settings" type="button">
-            <span class="menu-icon">⚙</span>
-            설정
-          </button>
+          <button class="menu-item active" data-view="dashboard" type="button"><span class="menu-icon">홈</span>대시보드</button>
+          <button class="menu-item" data-view="tree" type="button"><span class="menu-icon">트리</span>조직 트리</button>
+          <button class="menu-item" data-view="members" type="button"><span class="menu-icon">회원</span>회원 관리</button>
+          <button class="menu-item" data-view="links" type="button"><span class="menu-icon">링크</span>상조 약관 링크</button>
+          <button class="menu-item" data-view="service" type="button"><span class="menu-icon">상조</span>상조 회원</button>
+          <button class="menu-item" data-view="commission" type="button"><span class="menu-icon">수수료</span>커미션</button>
+          <button class="menu-item" data-view="settlement" type="button"><span class="menu-icon">정산</span>정산 관리</button>
+          <button class="menu-item" data-view="terms" type="button"><span class="menu-icon">약관</span>약관 관리</button>
+          <button class="menu-item" data-view="settings" type="button"><span class="menu-icon">설정</span>설정</button>
         </nav>
       </aside>
 
@@ -71,49 +45,31 @@
 
         <section class="view active" id="dashboardView">
           <div class="metric-grid">
-            <article class="metric">
-              <span>전체 하위 회원</span>
-              <strong>1,248</strong>
-              <small>admin 기준 전체 조회</small>
-            </article>
-            <article class="metric">
-              <span>영업사원</span>
-              <strong>42</strong>
-              <small>활성 38명</small>
-            </article>
-            <article class="metric">
-              <span>가입 신청</span>
-              <strong>87</strong>
-              <small>이번 달 기준</small>
-            </article>
-            <article class="metric">
-              <span>지급 대기 커미션</span>
-              <strong>₩12.8M</strong>
-              <small>승인 대기 포함</small>
-            </article>
+            <article class="metric"><span>관리 구조</span><strong>4단계</strong><small>admin > 센터장 > 영업사원 > 상조 회원</small></article>
+            <article class="metric"><span>센터장</span><strong id="centerMetric">-</strong><small>admin이 직접 등록</small></article>
+            <article class="metric"><span>영업사원</span><strong id="salesMetric">-</strong><small>센터장 선택 후 가입</small></article>
+            <article class="metric"><span>상조 회원</span><strong id="memberMetric">-</strong><small>약관 링크로 가입</small></article>
           </div>
 
           <div class="content-grid">
             <section class="panel wide">
               <div class="panel-heading">
-                <h3>최근 가입 흐름</h3>
+                <h3>최근 흐름</h3>
                 <button class="text-button" data-view-jump="tree" type="button">트리 보기</button>
               </div>
               <div class="timeline">
-                <div><strong>member_1048</strong><span>sales_001 상조 약관 링크로 등록</span><time>10분 전</time></div>
-                <div><strong>sales_008</strong><span>admin 하위 영업사원으로 승인</span><time>1시간 전</time></div>
-                <div><strong>member_1047</strong><span>개인정보 활용 동의 완료</span><time>2시간 전</time></div>
+                <div><strong>센터장</strong><span>admin이 관리자 화면에서 직접 등록합니다.</span><time>관리</time></div>
+                <div><strong>영업사원</strong><span>회원가입 시 소속 센터장을 선택합니다.</span><time>가입</time></div>
+                <div><strong>상조 회원</strong><span>admin 또는 영업사원 약관 링크를 통해 연결됩니다.</span><time>동의</time></div>
               </div>
             </section>
 
             <section class="panel">
-              <div class="panel-heading">
-                <h3>권한 기준</h3>
-              </div>
+              <div class="panel-heading"><h3>권한 기준</h3></div>
               <ul class="rule-list">
-                <li>admin은 전체 하위 구조 조회</li>
-                <li>영업사원은 자기 하위 회원만 조회</li>
-                <li>상조 약관 링크의 ref UID로 자동 배치</li>
+                <li>admin은 전체 조직과 약관 관리를 볼 수 있습니다.</li>
+                <li>센터장은 자기 자신과 하위 영업사원, 하위 회원만 볼 수 있습니다.</li>
+                <li>영업사원은 자기 자신과 직접 가입시킨 상조 회원만 볼 수 있습니다.</li>
               </ul>
             </section>
           </div>
@@ -132,29 +88,36 @@
         </section>
 
         <section class="view" id="membersView">
-          <div class="panel">
-            <div class="panel-heading">
-              <h3>회원 관리</h3>
-              <button class="primary-button compact" type="button">회원 추가</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>UID</th>
-                    <th>이름</th>
-                    <th>권한</th>
-                    <th>상위</th>
-                    <th>상태</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>sales_001</td><td>김파트너</td><td>영업사원</td><td>admin</td><td>활성</td></tr>
-                  <tr><td>member_1001</td><td>이고객</td><td>상조 회원</td><td>sales_001</td><td>상조 가입</td></tr>
-                  <tr><td>member_1002</td><td>박고객</td><td>상조 회원</td><td>sales_001</td><td>동의 대기</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="content-grid">
+            <section class="panel admin-only" id="centerCreatePanel">
+              <div class="panel-heading"><h3>센터장 등록</h3></div>
+              <form id="centerForm" class="term-form">
+                <label>아이디<input id="centerUsername" type="text" autocomplete="username" required /></label>
+                <label>비밀번호<input id="centerPassword" type="password" autocomplete="new-password" required /></label>
+                <label>센터장 이름<input id="centerName" type="text" required /></label>
+                <label>연락처<input id="centerPhone" type="tel" required /></label>
+                <label>이메일<input id="centerEmail" type="email" /></label>
+                <button class="primary-button" type="submit">센터장 등록</button>
+                <p id="centerMessage" class="form-note">센터장은 admin 바로 밑으로 등록됩니다.</p>
+              </form>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>회원 목록</h3>
+                <button class="outline-button compact-action" id="refreshMembersButton" type="button">새로고침</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>UID</th><th>이름</th><th>역할</th><th>상위 UID</th><th>상태</th></tr>
+                  </thead>
+                  <tbody id="membersTableBody">
+                    <tr><td colspan="5">회원 목록을 불러오는 중입니다.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
         </section>
 
@@ -165,60 +128,36 @@
               <button class="primary-button compact" id="createLinkButton" type="button">새 링크 생성</button>
             </div>
             <div class="link-builder">
-              <label>
-                상위 UID
-                <input id="refUid" type="text" value="admin" />
-              </label>
-              <label>
-                상조 약관 링크
-                <input id="inviteUrl" type="text" readonly />
-              </label>
+              <label>상위 UID<input id="refUid" type="text" value="admin" /></label>
+              <label>상조 약관 링크<input id="inviteUrl" type="text" readonly /></label>
               <button class="outline-button" id="copyBuiltLinkButton" type="button">복사</button>
             </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>링크명</th>
-                    <th>상위 UID</th>
-                    <th>클릭</th>
-                    <th>가입</th>
-                    <th>상태</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>admin 직속 상조 약관 링크</td><td>admin</td><td>0</td><td>0</td><td>사용중</td></tr>
-                  <tr><td>5월 캠페인</td><td>sales_003</td><td>91</td><td>12</td><td>사용중</td></tr>
-                </tbody>
-              </table>
-            </div>
+            <p class="form-note">상조 회원은 admin 또는 영업사원 UID 링크로 가입할 수 있습니다.</p>
           </div>
         </section>
 
         <section class="view" id="serviceView">
           <div class="panel">
-            <div class="panel-heading">
-              <h3>상조 회원 가입 신청</h3>
-            </div>
+            <div class="panel-heading"><h3>상조 회원 가입 신청</h3></div>
             <div class="empty-state">
-              <strong>가입 페이지는 상위 UID를 기준으로 회원을 자동 연결합니다.</strong>
-              <span>/signup.html?ref=admin 또는 /signup.html?ref=sales_001 형태의 링크에서 약관 동의와 개인정보 활용 동의를 받은 뒤 상조 회원으로 저장합니다.</span>
+              <strong>약관 링크를 통해 개인정보 동의를 받고 상조 회원을 등록합니다.</strong>
+              <span>/signup.html?ref=admin 또는 /signup.html?ref=sales_001 형식으로 연결됩니다.</span>
             </div>
           </div>
         </section>
 
         <section class="view placeholder-view" id="commissionView">
-          <div class="panel"><h3>커미션 발생 내역</h3><p>직접/하위 추천 기준 커미션 목록이 표시될 영역입니다.</p></div>
+          <div class="panel"><h3>커미션 발생 내역</h3><p>센터장, 영업사원, 상조 회원 기준의 커미션 구조를 관리할 영역입니다.</p></div>
         </section>
+
         <section class="view placeholder-view" id="settlementView">
-          <div class="panel"><h3>정산 관리</h3><p>승인 대기, 지급 완료, 환수 상태를 관리할 영역입니다.</p></div>
+          <div class="panel"><h3>정산 관리</h3><p>지급 대기, 지급 완료, 보류 상태를 관리할 영역입니다.</p></div>
         </section>
+
         <section class="view" id="termsView">
           <div class="content-grid terms-grid">
             <section class="panel">
-              <div class="panel-heading">
-                <h3>약관 수정</h3>
-              </div>
+              <div class="panel-heading"><h3>약관 수정</h3></div>
               <form id="termForm" class="term-form">
                 <label>
                   약관 구분
@@ -230,28 +169,16 @@
                 <label>
                   약관 종류
                   <select id="termType" required>
-                    <option value="service_terms">상조 서비스 이용약관</option>
+                    <option value="service_terms">서비스 이용약관</option>
                     <option value="privacy_policy">개인정보 수집 및 이용 동의</option>
                     <option value="marketing_consent">마케팅 수신 동의</option>
                   </select>
                 </label>
-                <label>
-                  제목
-                  <input id="termTitle" type="text" required />
-                </label>
-                <label>
-                  버전
-                  <input id="termVersion" type="text" value="1.0" required />
-                </label>
-                <label>
-                  내용
-                  <textarea id="termContent" rows="9" required></textarea>
-                </label>
+                <label>제목<input id="termTitle" type="text" required /></label>
+                <label>버전<input id="termVersion" type="text" value="1.0" required /></label>
+                <label>내용<textarea id="termContent" rows="9" required></textarea></label>
                 <div class="term-options">
-                  <label class="check-label">
-                    <input id="termRequired" type="checkbox" checked />
-                    필수 동의
-                  </label>
+                  <label class="check-label"><input id="termRequired" type="checkbox" checked />필수 동의</label>
                 </div>
                 <button class="primary-button" type="submit">수정 저장</button>
               </form>
@@ -269,20 +196,11 @@
           </div>
 
           <section class="panel terms-history-panel">
-            <div class="panel-heading">
-              <h3>최근 동의 이력</h3>
-            </div>
+            <div class="panel-heading"><h3>최근 동의 이력</h3></div>
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr>
-                    <th>회원 UID</th>
-                    <th>구분</th>
-                    <th>약관</th>
-                    <th>버전</th>
-                    <th>동의</th>
-                    <th>일시</th>
-                  </tr>
+                  <tr><th>회원 UID</th><th>구분</th><th>약관</th><th>버전</th><th>동의</th><th>일시</th></tr>
                 </thead>
                 <tbody id="termAgreementsBody">
                   <tr><td colspan="6">동의 이력을 불러오는 중입니다.</td></tr>
@@ -291,6 +209,7 @@
             </div>
           </section>
         </section>
+
         <section class="view placeholder-view" id="settingsView">
           <div class="panel"><h3>설정</h3><p>권한, 커미션 정책, 알림 설정을 관리할 영역입니다.</p></div>
         </section>

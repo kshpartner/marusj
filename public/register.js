@@ -1,4 +1,5 @@
 const salesRegisterForm = document.querySelector("#salesRegisterForm");
+const salesCenterUid = document.querySelector("#salesCenterUid");
 const salesUsername = document.querySelector("#salesUsername");
 const salesPassword = document.querySelector("#salesPassword");
 const salesName = document.querySelector("#salesName");
@@ -15,6 +16,33 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function renderCenters(centers) {
+  salesCenterUid.replaceChildren();
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "센터장을 선택해주세요";
+  salesCenterUid.append(placeholder);
+
+  centers.forEach((center) => {
+    const option = document.createElement("option");
+    option.value = center.uid;
+    option.textContent = `${center.name} (${center.uid})`;
+    salesCenterUid.append(option);
+  });
+}
+
+async function loadCenters() {
+  try {
+    const response = await fetch("/api/members/centers");
+    const result = await response.json();
+    renderCenters(result.centers || []);
+  } catch {
+    renderCenters([]);
+    showToast("센터장 목록을 불러오지 못했습니다.");
+  }
 }
 
 function renderActiveTerms(terms) {
@@ -61,6 +89,7 @@ salesRegisterForm.addEventListener("submit", async (event) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        centerUid: salesCenterUid.value,
         username: salesUsername.value.trim(),
         password: salesPassword.value,
         name: salesName.value.trim(),
@@ -92,4 +121,5 @@ salesRegisterForm.addEventListener("submit", async (event) => {
   }
 });
 
+loadCenters();
 loadActiveTerms();

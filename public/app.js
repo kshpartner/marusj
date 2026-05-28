@@ -6,7 +6,9 @@ if (!isLoggedIn) {
 
 const currentUser = JSON.parse(sessionStorage.getItem("maruAdminUser") || "{}");
 const isAdmin = currentUser.role === "admin";
+const canCreateSignupLink = isAdmin || currentUser.role === "sales";
 const currentRootUid = currentUser.uid || "admin";
+
 const logoutButton = document.querySelector("#logoutButton");
 const menuItems = document.querySelectorAll(".menu-item");
 const views = document.querySelectorAll(".view");
@@ -17,6 +19,10 @@ const refUid = document.querySelector("#refUid");
 const inviteUrl = document.querySelector("#inviteUrl");
 const treeBoard = document.querySelector("#treeBoard");
 const treeSearchInput = document.querySelector("#treeSearchInput");
+const membersTableBody = document.querySelector("#membersTableBody");
+const refreshMembersButton = document.querySelector("#refreshMembersButton");
+const centerForm = document.querySelector("#centerForm");
+const centerMessage = document.querySelector("#centerMessage");
 const termForm = document.querySelector("#termForm");
 const termsList = document.querySelector("#termsList");
 const termAgreementsBody = document.querySelector("#termAgreementsBody");
@@ -24,6 +30,7 @@ const refreshTermsButton = document.querySelector("#refreshTermsButton");
 
 let treeMembers = [];
 let treeLoaded = false;
+let membersLoaded = false;
 let termsLoaded = false;
 let currentTerms = [];
 
@@ -41,6 +48,7 @@ const viewLabels = {
 
 const roleLabels = {
   admin: "전체 관리자",
+  center_manager: "센터장",
   sales: "영업사원",
   funeral_member: "상조 회원",
   customer: "상조 회원",
@@ -50,6 +58,16 @@ function applyPermissions() {
   document.querySelectorAll('[data-view="terms"]').forEach((item) => {
     item.hidden = !isAdmin;
   });
+
+  document.querySelectorAll('[data-view="links"]').forEach((item) => {
+    item.hidden = !canCreateSignupLink;
+  });
+
+  document.querySelectorAll(".admin-only").forEach((item) => {
+    item.hidden = !isAdmin;
+  });
+
+  document.querySelector("#copyInviteButton").hidden = !canCreateSignupLink;
 
   if (rootEyebrow) {
     rootEyebrow.textContent = isAdmin ? "최상위 루트: admin" : `조회 루트: ${currentRootUid}`;
@@ -73,6 +91,11 @@ function setView(viewName) {
     viewName = "dashboard";
   }
 
+  if (viewName === "links" && !canCreateSignupLink) {
+    showToast("상조 약관 링크는 admin 또는 영업사원만 만들 수 있습니다.");
+    viewName = "dashboard";
+  }
+
   menuItems.forEach((item) => {
     item.classList.toggle("active", item.dataset.view === viewName);
   });
@@ -85,6 +108,10 @@ function setView(viewName) {
 
   if (viewName === "tree" && !treeLoaded) {
     loadTree();
+  }
+
+  if (viewName === "members" && !membersLoaded) {
+    loadMembers();
   }
 
   if (viewName === "terms" && !termsLoaded) {
@@ -105,12 +132,11 @@ function normalizeText(value) {
 }
 
 function memberMatches(member, query) {
-  if (!query) {
-    return true;
-  }
+  if (!query) return true;
 
-  return [member.name, member.uid, member.phone, member.email, member.parentUid]
-    .some((value) => normalizeText(value).includes(query));
+  return [member.name, member.uid, member.phone, member.email, member.parentUid].some((value) =>
+    normalizeText(value).includes(query),
+  );
 }
 
 function buildTree(members, query = "") {
@@ -119,17 +145,12 @@ function buildTree(members, query = "") {
   const childMap = new Map();
 
   members.forEach((member) => {
-    memberMap.set(member.uid, {
-      ...member,
-      children: [],
-    });
+    memberMap.set(member.uid, { ...member, children: [] });
   });
 
   memberMap.forEach((member) => {
     const parentUid = member.parentUid || member.parent_uid;
-    if (!parentUid) {
-      return;
-    }
+    if (!parentUid) return;
 
     if (!childMap.has(parentUid)) {
       childMap.set(parentUid, []);
@@ -143,7 +164,8 @@ function buildTree(members, query = "") {
     member.children = childUids.map((uid) => memberMap.get(uid)).filter(Boolean);
   });
 
-  const root = memberMap.get(currentRootUid) || [...memberMap.values()].find((member) => !member.parentUid && !member.parent_uid);
+  const root =
+    memberMap.get(currentRootUid) || [...memberMap.values()].find((member) => !member.parentUid && !member.parent_uid);
 
   function cloneVisible(member) {
     const visibleChildren = member.children.map(cloneVisible).filter(Boolean);
@@ -153,13 +175,17 @@ function buildTree(members, query = "") {
       return null;
     }
 
-    return {
-      ...member,
-      children: visibleChildren,
-    };
+    return { ...member, children: visibleChildren };
   }
 
   return root ? cloneVisible(root) : null;
+}
+
+function getTreeNodeClass(role) {
+  if (role === "admin") return "admin-node";
+  if (role === "center_manager") return "center-node";
+  if (role === "sales") return "sales-node";
+  return "customer-node";
 }
 
 function createTreeNode(member) {
@@ -169,7 +195,7 @@ function createTreeNode(member) {
   const role = member.role || "customer";
 
   button.type = "button";
-  button.className = `tree-node ${role === "admin" ? "admin-node" : role === "sales" ? "sales-node" : "customer-node"}`;
+  button.className = `tree-node ${getTreeNodeClass(role)}`;
   button.append(`${member.name || member.uid} (${member.uid})`);
 
   label.textContent = roleLabels[role] || role;
@@ -203,6 +229,27 @@ function renderTree() {
   treeBoard.append(tree);
 }
 
+function updateMetrics(members) {
+  const centerMetric = document.querySelector("#centerMetric");
+  const salesMetric = document.querySelector("#salesMetric");
+  const memberMetric = document.querySelector("#memberMetric");
+
+  centerMetric.textContent = members.filter((member) => member.role === "center_manager").length;
+  salesMetric.textContent = members.filter((member) => member.role === "sales").length;
+  memberMetric.textContent = members.filter((member) => ["funeral_member", "customer"].includes(member.role)).length;
+}
+
+async function fetchVisibleMembers() {
+  const response = await fetch(`/api/members/tree?rootUid=${encodeURIComponent(currentRootUid)}`);
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "조직 정보를 불러오지 못했습니다.");
+  }
+
+  return result.members || [];
+}
+
 async function loadTree() {
   treeBoard.replaceChildren();
   const loading = document.createElement("div");
@@ -211,19 +258,95 @@ async function loadTree() {
   treeBoard.append(loading);
 
   try {
-    const response = await fetch(`/api/members/tree?rootUid=${encodeURIComponent(currentRootUid)}`);
+    treeMembers = await fetchVisibleMembers();
+    treeLoaded = true;
+    updateMetrics(treeMembers);
+    renderTree();
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+function renderMembers(members) {
+  membersTableBody.replaceChildren();
+
+  if (!members.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.textContent = "회원 목록이 없습니다.";
+    row.append(cell);
+    membersTableBody.append(row);
+    return;
+  }
+
+  members.forEach((member) => {
+    const row = document.createElement("tr");
+    [member.uid, member.name, roleLabels[member.role] || member.role, member.parentUid || "-", member.status].forEach(
+      (value) => {
+        const cell = document.createElement("td");
+        cell.textContent = value || "";
+        row.append(cell);
+      },
+    );
+    membersTableBody.append(row);
+  });
+}
+
+async function loadMembers() {
+  try {
+    const members = await fetchVisibleMembers();
+    treeMembers = members;
+    membersLoaded = true;
+    updateMetrics(members);
+    renderMembers(members);
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+async function createCenter(event) {
+  event.preventDefault();
+
+  if (!isAdmin) {
+    showToast("센터장은 admin만 등록할 수 있습니다.");
+    return;
+  }
+
+  const payload = {
+    username: document.querySelector("#centerUsername").value.trim(),
+    password: document.querySelector("#centerPassword").value,
+    name: document.querySelector("#centerName").value.trim(),
+    phone: document.querySelector("#centerPhone").value.trim(),
+    email: document.querySelector("#centerEmail").value.trim(),
+  };
+
+  try {
+    const response = await fetch("/api/members/centers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     const result = await response.json();
 
     if (!response.ok) {
-      showToast(result.message || "조직 트리를 불러오지 못했습니다.");
+      centerMessage.textContent = result.message || "센터장 등록에 실패했습니다.";
+      centerMessage.classList.add("error");
+      showToast(centerMessage.textContent);
       return;
     }
 
-    treeMembers = result.members || [];
-    treeLoaded = true;
-    renderTree();
+    centerForm.reset();
+    centerMessage.textContent = `${result.center.name} (${result.center.uid}) 센터장이 등록되었습니다.`;
+    centerMessage.classList.remove("error");
+    showToast("센터장이 등록되었습니다.");
+    treeLoaded = false;
+    membersLoaded = false;
+    await loadMembers();
   } catch {
-    showToast("조직 트리 API 서버 상태를 확인해주세요.");
+    centerMessage.textContent = "서버에 연결할 수 없습니다.";
+    centerMessage.classList.add("error");
+    showToast("API 서버 실행 상태를 확인해주세요.");
   }
 }
 
@@ -244,9 +367,7 @@ async function createInviteLink() {
   try {
     const response = await fetch("/api/invite-links", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: "상조 약관 링크",
         refUid: uid,
@@ -268,7 +389,7 @@ async function createInviteLink() {
 
 function getTermTypeLabel(type) {
   const labels = {
-    service_terms: "상조 서비스 이용약관",
+    service_terms: "서비스 이용약관",
     privacy_policy: "개인정보 수집 및 이용 동의",
     marketing_consent: "마케팅 수신 동의",
   };
@@ -309,7 +430,9 @@ function renderTerms(terms) {
     item.className = "term-item";
     heading.className = "term-item-heading";
     title.textContent = `${term.title} v${term.version}`;
-    meta.textContent = `${getTermScopeLabel(term.scope)} · ${getTermTypeLabel(term.type)} · ${term.requiredYn === "Y" ? "필수" : "선택"}`;
+    meta.textContent = `${getTermScopeLabel(term.scope)} · ${getTermTypeLabel(term.type)} · ${
+      term.requiredYn === "Y" ? "필수" : "선택"
+    }`;
     content.textContent = term.content;
     actions.className = "term-item-actions";
     editButton.type = "button";
@@ -348,12 +471,18 @@ function renderAgreements(agreements) {
 
   agreements.forEach((agreement) => {
     const row = document.createElement("tr");
-    [agreement.userUid, getTermScopeLabel(agreement.termScope), agreement.termTitle, agreement.termVersion, agreement.agreedYn, agreement.agreedAt]
-      .forEach((value) => {
-        const cell = document.createElement("td");
-        cell.textContent = value || "";
-        row.append(cell);
-      });
+    [
+      agreement.userUid,
+      getTermScopeLabel(agreement.termScope),
+      agreement.termTitle,
+      agreement.termVersion,
+      agreement.agreedYn,
+      agreement.agreedAt,
+    ].forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "";
+      row.append(cell);
+    });
     termAgreementsBody.append(row);
   });
 }
@@ -394,9 +523,7 @@ async function saveTerm(event) {
   try {
     const response = await fetch(`/api/terms/${encodeURIComponent(payload.scope)}/${encodeURIComponent(payload.type)}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
@@ -406,7 +533,7 @@ async function saveTerm(event) {
       return;
     }
 
-    showToast("약관이 수정되었습니다.");
+    showToast("약관을 수정했습니다.");
     await loadTerms();
   } catch {
     showToast("약관 저장 중 오류가 발생했습니다.");
@@ -428,28 +555,28 @@ document.querySelectorAll("[data-view-jump]").forEach((button) => {
 });
 
 document.querySelector("#createLinkButton").addEventListener("click", createInviteLink);
-
 document.querySelector("#copyBuiltLinkButton").addEventListener("click", () => {
   updateInviteUrl();
   copyText(inviteUrl.value, "상조 약관 링크를 복사했습니다.");
 });
-
 document.querySelector("#copyInviteButton").addEventListener("click", () => {
   updateInviteUrl();
   copyText(inviteUrl.value, "기본 상조 약관 링크를 복사했습니다.");
 });
 
+centerForm?.addEventListener("submit", createCenter);
+refreshMembersButton?.addEventListener("click", loadMembers);
 termForm.addEventListener("submit", saveTerm);
 refreshTermsButton.addEventListener("click", loadTerms);
 document.querySelector("#termType").addEventListener("change", (event) => {
   const scope = document.querySelector("#termScope").value;
   const term = currentTerms.find((item) => item.scope === scope && item.type === event.target.value);
-  if (term) {
-    fillTermForm(term);
-  }
+  if (term) fillTermForm(term);
 });
 document.querySelector("#termScope").addEventListener("change", loadTerms);
 treeSearchInput.addEventListener("input", renderTree);
 refUid.addEventListener("input", updateInviteUrl);
+
 applyPermissions();
 updateInviteUrl();
+loadTree();
