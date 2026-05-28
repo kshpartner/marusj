@@ -21,6 +21,9 @@ const treeBoard = document.querySelector("#treeBoard");
 const treeSearchInput = document.querySelector("#treeSearchInput");
 const membersTableBody = document.querySelector("#membersTableBody");
 const refreshMembersButton = document.querySelector("#refreshMembersButton");
+const memberTabButtons = document.querySelectorAll("[data-member-tab]");
+const memberTabs = document.querySelectorAll(".member-tab");
+const memberFilterButtons = document.querySelectorAll("[data-member-filter]");
 const centerForm = document.querySelector("#centerForm");
 const centerMessage = document.querySelector("#centerMessage");
 const termForm = document.querySelector("#termForm");
@@ -33,6 +36,7 @@ let treeLoaded = false;
 let membersLoaded = false;
 let termsLoaded = false;
 let currentTerms = [];
+let currentMemberFilter = "all";
 
 const viewLabels = {
   dashboard: "대시보드",
@@ -60,6 +64,12 @@ const genderLabels = {
   other: "기타",
 };
 
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
 function applyPermissions() {
   document.querySelectorAll('[data-view="terms"]').forEach((item) => {
     item.hidden = !isAdmin;
@@ -75,6 +85,10 @@ function applyPermissions() {
 
   document.querySelector("#copyInviteButton").hidden = !canCreateSignupLink;
 
+  if (!isAdmin) {
+    showMemberTab("list");
+  }
+
   if (rootEyebrow) {
     rootEyebrow.textContent = isAdmin ? "최상위 루트: admin" : `조회 루트: ${currentRootUid}`;
   }
@@ -83,12 +97,6 @@ function applyPermissions() {
     refUid.value = currentRootUid;
     refUid.readOnly = !isAdmin;
   }
-}
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("show");
-  window.setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
 function setView(viewName) {
@@ -123,6 +131,26 @@ function setView(viewName) {
   if (viewName === "terms" && !termsLoaded) {
     loadTerms();
   }
+}
+
+function showMemberTab(tabName) {
+  memberTabButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.memberTab === tabName);
+  });
+
+  memberTabs.forEach((tab) => {
+    const isTarget =
+      (tabName === "list" && tab.id === "memberListTab") || (tabName === "center" && tab.id === "centerCreateTab");
+    tab.classList.toggle("active", isTarget);
+  });
+}
+
+function setMemberFilter(filter) {
+  currentMemberFilter = filter;
+  memberFilterButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.memberFilter === filter);
+  });
+  renderMembers(treeMembers);
 }
 
 function updateInviteUrl() {
@@ -273,20 +301,39 @@ async function loadTree() {
   }
 }
 
+function getParentName(member, memberMap) {
+  if (!member.parentUid) return "-";
+  return memberMap.get(member.parentUid)?.name || "-";
+}
+
+function getFilteredMembers(members) {
+  if (currentMemberFilter === "sales") {
+    return members.filter((member) => member.role === "sales");
+  }
+
+  if (currentMemberFilter === "funeral_member") {
+    return members.filter((member) => ["funeral_member", "customer"].includes(member.role));
+  }
+
+  return members;
+}
+
 function renderMembers(members) {
+  const memberMap = new Map(members.map((member) => [member.uid, member]));
+  const visibleMembers = getFilteredMembers(members);
   membersTableBody.replaceChildren();
 
-  if (!members.length) {
+  if (!visibleMembers.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 9;
-    cell.textContent = "회원 목록이 없습니다.";
+    cell.colSpan = 10;
+    cell.textContent = "표시할 회원이 없습니다.";
     row.append(cell);
     membersTableBody.append(row);
     return;
   }
 
-  members.forEach((member) => {
+  visibleMembers.forEach((member) => {
     const row = document.createElement("tr");
     [
       member.uid,
@@ -296,15 +343,14 @@ function renderMembers(members) {
       genderLabels[member.gender] || member.gender || "-",
       member.region || "-",
       roleLabels[member.role] || member.role,
+      getParentName(member, memberMap),
       member.parentUid || "-",
       member.status,
-    ].forEach(
-      (value) => {
-        const cell = document.createElement("td");
-        cell.textContent = value || "";
-        row.append(cell);
-      },
-    );
+    ].forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "";
+      row.append(cell);
+    });
     membersTableBody.append(row);
   });
 }
@@ -358,6 +404,7 @@ async function createCenter(event) {
     showToast("센터장이 등록되었습니다.");
     treeLoaded = false;
     membersLoaded = false;
+    showMemberTab("list");
     await loadMembers();
   } catch {
     centerMessage.textContent = "서버에 연결할 수 없습니다.";
@@ -564,6 +611,14 @@ logoutButton.addEventListener("click", () => {
 
 menuItems.forEach((item) => {
   item.addEventListener("click", () => setView(item.dataset.view));
+});
+
+memberTabButtons.forEach((button) => {
+  button.addEventListener("click", () => showMemberTab(button.dataset.memberTab));
+});
+
+memberFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => setMemberFilter(button.dataset.memberFilter));
 });
 
 document.querySelectorAll("[data-view-jump]").forEach((button) => {
