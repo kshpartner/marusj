@@ -1,4 +1,4 @@
-const isLoggedIn = sessionStorage.getItem("maruAdminLoggedIn") === "true";
+﻿const isLoggedIn = sessionStorage.getItem("maruAdminLoggedIn") === "true";
 
 if (!isLoggedIn) {
   window.location.replace("./login.html");
@@ -52,8 +52,8 @@ const viewLabels = {
 
 const roleLabels = {
   admin: "전체 관리자",
-  center_manager: "센터장",
-  sales: "영업사원",
+  center_manager: "사업단",
+  sales: "팀장",
   funeral_member: "상조 회원",
   customer: "상조 회원",
 };
@@ -106,7 +106,7 @@ function setView(viewName) {
   }
 
   if (viewName === "links" && !canCreateSignupLink) {
-    showToast("상조 약관 링크는 admin 또는 영업사원만 만들 수 있습니다.");
+    showToast("상조 약관 링크는 admin 또는 팀장만 만들 수 있습니다.");
     viewName = "dashboard";
   }
 
@@ -371,7 +371,7 @@ async function createCenter(event) {
   event.preventDefault();
 
   if (!isAdmin) {
-    showToast("센터장은 admin만 등록할 수 있습니다.");
+    showToast("사업단은 admin만 등록할 수 있습니다.");
     return;
   }
 
@@ -392,16 +392,16 @@ async function createCenter(event) {
     const result = await response.json();
 
     if (!response.ok) {
-      centerMessage.textContent = result.message || "센터장 등록에 실패했습니다.";
+      centerMessage.textContent = result.message || "사업단 등록에 실패했습니다.";
       centerMessage.classList.add("error");
       showToast(centerMessage.textContent);
       return;
     }
 
     centerForm.reset();
-    centerMessage.textContent = `${result.center.name} (${result.center.uid}) 센터장이 등록되었습니다.`;
+    centerMessage.textContent = `${result.center.name} (${result.center.uid}) 사업단이 등록되었습니다.`;
     centerMessage.classList.remove("error");
-    showToast("센터장이 등록되었습니다.");
+    showToast("사업단이 등록되었습니다.");
     treeLoaded = false;
     membersLoaded = false;
     showMemberTab("list");
@@ -462,7 +462,7 @@ function getTermTypeLabel(type) {
 
 function getTermScopeLabel(scope) {
   const labels = {
-    sales_register: "영업사원 회원가입 약관",
+    sales_register: "팀장 회원가입 약관",
     funeral_member: "상조 회원 가입 약관",
   };
 

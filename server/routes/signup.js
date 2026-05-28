@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const { getPool, hasDatabaseConfig, sql } = require("../db");
 
 const router = express.Router();
@@ -65,7 +65,7 @@ router.post("/", async (req, res, next) => {
       `);
 
     if (!parent.recordset[0]) {
-      return res.status(400).json({ message: "상조 회원은 admin 또는 영업사원 링크로만 가입할 수 있습니다." });
+      return res.status(400).json({ message: "상조 회원은 admin 또는 팀장 링크로만 가입할 수 있습니다." });
     }
 
     const activeTerms = await pool.request().query(`

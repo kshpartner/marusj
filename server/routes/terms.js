@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const { getPool, hasDatabaseConfig, sql } = require("../db");
 
 const router = express.Router();
@@ -14,10 +14,10 @@ function getDefaultTerms(scope = "funeral_member") {
       id: isSales ? 1 : 4,
       scope,
       type: "service_terms",
-      title: isSales ? "영업사원 회원가입 이용약관" : "상조 회원 가입 약관",
+      title: isSales ? "팀장 회원가입 이용약관" : "상조 회원 가입 약관",
       version: "1.0",
       content: isSales
-        ? "영업사원 계정 생성, admin 하위 등록, 가입 링크 발급 및 고객 관리에 관한 기본 약관입니다."
+        ? "팀장 계정 생성, admin 하위 등록, 가입 링크 발급 및 고객 관리에 관한 기본 약관입니다."
         : "상조 회원 가입 신청, 가입 경로 연결, 상담 및 신청 처리에 관한 기본 약관입니다.",
       requiredYn: "Y",
       activeYn: "Y",
@@ -29,7 +29,7 @@ function getDefaultTerms(scope = "funeral_member") {
       title: "개인정보 수집 및 이용 동의",
       version: "1.0",
       content: isSales
-        ? "영업사원 회원가입, 계정 관리, 본인 확인, 활동 관리 및 정산 안내를 위해 개인정보를 수집 및 이용합니다."
+        ? "팀장 회원가입, 계정 관리, 본인 확인, 활동 관리 및 정산 안내를 위해 개인정보를 수집 및 이용합니다."
         : "상조 가입 상담, 신청 접수, 본인 확인, 고객 관리 및 가입 경로 확인을 위해 개인정보를 수집 및 이용합니다.",
       requiredYn: "Y",
       activeYn: "Y",

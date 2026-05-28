@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const { getPool, hasDatabaseConfig, sql } = require("../db");
 
 const router = express.Router();
@@ -84,7 +84,7 @@ router.post("/centers", async (req, res, next) => {
   const { username, password, name, phone, email } = req.body;
 
   if (!username || !password || !name || !phone) {
-    return res.status(400).json({ message: "센터장 등록 정보를 확인해주세요." });
+    return res.status(400).json({ message: "사업단 등록 정보를 확인해주세요." });
   }
 
   try {

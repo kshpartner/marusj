@@ -1,4 +1,4 @@
-const salesRegisterForm = document.querySelector("#salesRegisterForm");
+﻿const salesRegisterForm = document.querySelector("#salesRegisterForm");
 const salesCenterUid = document.querySelector("#salesCenterUid");
 const salesUsername = document.querySelector("#salesUsername");
 const salesPassword = document.querySelector("#salesPassword");
@@ -23,7 +23,7 @@ function renderCenters(centers) {
 
   const placeholder = document.createElement("option");
   placeholder.value = "";
-  placeholder.textContent = "센터장을 선택해주세요";
+  placeholder.textContent = "사업단을 선택해주세요";
   salesCenterUid.append(placeholder);
 
   centers.forEach((center) => {
@@ -41,7 +41,7 @@ async function loadCenters() {
     renderCenters(result.centers || []);
   } catch {
     renderCenters([]);
-    showToast("센터장 목록을 불러오지 못했습니다.");
+    showToast("사업단 목록을 불러오지 못했습니다.");
   }
 }
 
@@ -111,7 +111,7 @@ salesRegisterForm.addEventListener("submit", async (event) => {
     }
 
     salesRegisterForm.reset();
-    salesRegisterMessage.textContent = `${result.sales.uid} 영업사원 계정이 생성되었습니다.`;
+    salesRegisterMessage.textContent = `${result.sales.uid} 팀장 계정이 생성되었습니다.`;
     salesRegisterMessage.classList.remove("error");
     showToast("회원가입이 완료되었습니다.");
   } catch {

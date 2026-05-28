@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const { getPool, hasDatabaseConfig, sql } = require("../db");
 
 const router = express.Router();
@@ -63,7 +63,7 @@ router.post("/register", async (req, res, next) => {
       `);
 
     if (!center.recordset[0]) {
-      return res.status(400).json({ message: "영업사원은 활성 센터장 밑으로만 가입할 수 있습니다." });
+      return res.status(400).json({ message: "팀장은 활성 사업단 밑으로만 가입할 수 있습니다." });
     }
 
     const activeTerms = await pool.request().query(`
