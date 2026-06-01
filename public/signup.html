@@ -3,22 +3,139 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>상조 가입 약관서 | MaRu Partner</title>
+    <title>상조 회원 가입 | MaRu Partner</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="signup-shell">
-      <section class="signup-panel">
+    <main class="signup-shell service-signup-shell">
+      <section class="signup-panel service-signup-panel">
         <div class="brand-lockup">
           <div class="brand-mark">M</div>
           <div>
-            <p class="eyebrow">상조 가입 약관서</p>
-            <h1>MaRu Partner</h1>
+            <p class="eyebrow">마루상조 회원 가입</p>
+            <h1>마루상조 상품 안내</h1>
           </div>
         </div>
 
-        <form id="signupForm" class="login-form">
+        <section id="serviceIntro" class="service-intro" aria-label="상조 상품 안내">
+          <div class="intro-progress" aria-label="안내 진행 단계">
+            <span class="intro-dot active" data-intro-dot="0"></span>
+            <span class="intro-dot" data-intro-dot="1"></span>
+            <span class="intro-dot" data-intro-dot="2"></span>
+          </div>
+
+          <article class="intro-slide active" data-intro-slide="0">
+            <div class="service-hero">
+              <div>
+                <p class="eyebrow">품격 있는 장례 토탈 케어</p>
+                <h2>고인용품, 인력지원, 차량, 의전용품까지 한 번에 준비합니다.</h2>
+              </div>
+              <p>
+                마루상조는 장례 현장에서 필요한 주요 구성품과 전문 인력을 상품별로 체계화했습니다.
+                가입 전 상품 범위와 제공 내용을 먼저 확인해 주세요.
+              </p>
+            </div>
+            <div class="service-summary-grid">
+              <div><strong>3가지 상품</strong><span>일반형, 고급형, 최고급형</span></div>
+              <div><strong>전문 인력</strong><span>장례지도사, 접객도우미 지원</span></div>
+              <div><strong>의전 차량</strong><span>리무진, 장의버스, 앰뷸런스</span></div>
+            </div>
+          </article>
+
+          <article class="intro-slide" data-intro-slide="1">
+            <div class="plan-grid">
+              <section class="plan-card">
+                <span>실속 서비스</span>
+                <h2>일반형</h2>
+                <p>합리적인 가격에 모든 장례 품목이 포함된 상품입니다.</p>
+                <strong>260만원</strong>
+              </section>
+              <section class="plan-card featured">
+                <span>고급 서비스</span>
+                <h2>고급형</h2>
+                <p>풍부한 인력과 고급 장례 용품, 버스와 리무진이 포함됩니다.</p>
+                <strong>360만원</strong>
+              </section>
+              <section class="plan-card premium">
+                <span>프리미엄 서비스</span>
+                <h2>최고급형</h2>
+                <p>최대 인력 지원과 최고급 수의, 전국 의전 차량을 제공합니다.</p>
+                <strong>490만원</strong>
+              </section>
+            </div>
+          </article>
+
+          <article class="intro-slide" data-intro-slide="2">
+            <div class="service-table-wrap">
+              <table class="service-table">
+                <thead>
+                  <tr>
+                    <th>구분</th>
+                    <th>일반형</th>
+                    <th>고급형</th>
+                    <th>최고급형</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>관</th>
+                    <td>오동나무 목관</td>
+                    <td colspan="2">오동나무 고급목관</td>
+                  </tr>
+                  <tr>
+                    <th>수의</th>
+                    <td>일반 수의</td>
+                    <td>고급 수의</td>
+                    <td>최고급 수의</td>
+                  </tr>
+                  <tr>
+                    <th>장식 및 입관용품</th>
+                    <td colspan="3">장식, 관보, 명정, 결관바, 알코올, 탈지면, 보공, 기독경, 습신 등 제공</td>
+                  </tr>
+                  <tr>
+                    <th>장례지도사</th>
+                    <td colspan="3">의전팀장 1명, 입관 진행 1명</td>
+                  </tr>
+                  <tr>
+                    <th>접객도우미</th>
+                    <td>3명, 10시간/명</td>
+                    <td>5명, 10시간/명</td>
+                    <td>8명, 10시간/명</td>
+                  </tr>
+                  <tr>
+                    <th>리무진/장의버스</th>
+                    <td>왕복 100km</td>
+                    <td>왕복 200km</td>
+                    <td>전국 무료</td>
+                  </tr>
+                  <tr>
+                    <th>상복</th>
+                    <td>남여상복 3각벌</td>
+                    <td>남여상복 4벌</td>
+                    <td>남여상복 직계 전원</td>
+                  </tr>
+                  <tr>
+                    <th>알선서비스</th>
+                    <td colspan="3">장지동행, 화장장 무료예약부고 알림톡, 공원묘지 및 매장지 예약, 2차 장지 안내</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <div class="intro-actions">
+            <button id="introPrevButton" class="outline-button" type="button">이전</button>
+            <button id="introNextButton" class="primary-button" type="button">다음</button>
+          </div>
+        </section>
+
+        <form id="signupForm" class="login-form signup-form" hidden>
           <input id="signupRefUid" type="hidden" />
+
+          <div class="form-section-heading">
+            <p class="eyebrow">상조 회원 정보</p>
+            <h2>가입 신청서</h2>
+          </div>
 
           <label>
             이름
@@ -29,7 +146,7 @@
             <input id="signupPhone" type="tel" autocomplete="tel" required />
           </label>
           <label>
-            생년월일 8자
+            생년월일 8자리
             <input id="signupBirthDate" type="text" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="예: 19900101" required />
           </label>
           <label>
@@ -75,8 +192,8 @@
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script src="./config.js"></script>
-    <script src="./api.js"></script>
-    <script src="./signup.js"></script>
+    <script src="./config.js?v=5"></script>
+    <script src="./api.js?v=5"></script>
+    <script src="./signup.js?v=5"></script>
   </body>
 </html>

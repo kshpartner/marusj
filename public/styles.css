@@ -69,6 +69,222 @@ button {
   box-shadow: var(--shadow);
 }
 
+.service-signup-shell {
+  align-items: start;
+  padding-block: 34px;
+}
+
+.service-signup-panel {
+  width: min(1060px, 100%);
+}
+
+.service-intro {
+  display: grid;
+  gap: 22px;
+}
+
+.intro-progress {
+  display: flex;
+  gap: 8px;
+}
+
+.intro-dot {
+  width: 36px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.intro-dot.active {
+  background: var(--accent);
+}
+
+.intro-slide {
+  display: none;
+}
+
+.intro-slide.active {
+  display: grid;
+  gap: 18px;
+}
+
+.service-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  gap: 26px;
+  align-items: end;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 26px;
+  background:
+    linear-gradient(135deg, rgba(18, 108, 101, 0.92), rgba(23, 44, 64, 0.92)),
+    #172c40;
+  color: #fff;
+}
+
+.service-hero .eyebrow {
+  color: #9ee0d8;
+}
+
+.service-hero h2 {
+  max-width: 680px;
+  font-size: 30px;
+  line-height: 1.25;
+}
+
+.service-hero p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.service-summary-grid,
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.service-summary-grid div,
+.plan-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(27, 39, 54, 0.06);
+}
+
+.service-summary-grid div {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+}
+
+.service-summary-grid strong {
+  font-size: 18px;
+}
+
+.service-summary-grid span {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.plan-card {
+  display: grid;
+  min-height: 310px;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 14px;
+  padding: 24px;
+  color: #fff;
+  background: #5f5c54;
+}
+
+.plan-card.featured {
+  background: #65515d;
+}
+
+.plan-card.premium {
+  background: #6b5c36;
+}
+
+.plan-card span {
+  color: #9ee0a3;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.plan-card.featured span {
+  color: #f1a9d1;
+}
+
+.plan-card.premium span {
+  color: #f7d967;
+}
+
+.plan-card h2 {
+  font-size: 30px;
+}
+
+.plan-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.plan-card strong {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.service-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.service-table {
+  min-width: 880px;
+  table-layout: fixed;
+}
+
+.service-table th,
+.service-table td {
+  border-top: 1px solid #c8c0b7;
+  border-left: 1px solid #c8c0b7;
+  padding: 15px 12px;
+  text-align: center;
+  white-space: normal;
+  vertical-align: middle;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.service-table thead th {
+  border-top: 0;
+  background: #4f4d46;
+  color: #fff;
+  font-size: 18px;
+}
+
+.service-table th:first-child,
+.service-table td:first-child {
+  border-left: 0;
+}
+
+.service-table tbody th {
+  width: 150px;
+  background: #a59d91;
+  color: #fff;
+}
+
+.intro-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.intro-actions button {
+  min-width: 150px;
+}
+
+.intro-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.signup-form {
+  max-width: 620px;
+}
+
+.form-section-heading {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
 .login-visual {
   display: grid;
   place-items: center;
@@ -917,6 +1133,16 @@ th {
   .content-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .service-hero,
+  .service-summary-grid,
+  .plan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-card {
+    min-height: 240px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -954,5 +1180,39 @@ th {
   .install-box {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .signup-shell {
+    padding: 16px;
+  }
+
+  .service-signup-panel {
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .service-hero {
+    padding: 20px;
+  }
+
+  .service-hero h2 {
+    font-size: 24px;
+  }
+
+  .plan-card h2 {
+    font-size: 26px;
+  }
+
+  .plan-card strong {
+    font-size: 30px;
+  }
+
+  .intro-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .intro-actions button {
+    width: 100%;
   }
 }
