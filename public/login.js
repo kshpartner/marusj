@@ -12,6 +12,8 @@ function showToast(message) {
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  loginMessage.textContent = "로그인 중입니다.";
+  loginMessage.classList.remove("error");
 
   try {
     const response = await maruFetch("/api/auth/login", {
