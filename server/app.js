@@ -10,7 +10,7 @@ const inviteLinkRoutes = require("./routes/inviteLinks");
 const signupRoutes = require("./routes/signup");
 const salesRoutes = require("./routes/sales");
 const termsRoutes = require("./routes/terms");
-const { hasDatabaseConfig } = require("./db");
+const { getPool, hasDatabaseConfig } = require("./db");
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -20,10 +20,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(publicDir));
 
-app.get("/api/health", (req, res) => {
+app.get("/api/health", async (req, res) => {
+  const databaseConfigured = hasDatabaseConfig();
+  let databaseConnected = false;
+
+  if (databaseConfigured) {
+    try {
+      const pool = await getPool();
+      await pool.request().query("SELECT 1 AS ok");
+      databaseConnected = true;
+    } catch (error) {
+      console.error("Database health check failed:", error.message);
+    }
+  }
+
   res.json({
     ok: true,
-    databaseConfigured: hasDatabaseConfig(),
+    databaseConfigured,
+    databaseConnected,
   });
 });
 
