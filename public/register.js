@@ -36,7 +36,7 @@ function renderCenters(centers) {
 
 async function loadCenters() {
   try {
-    const response = await fetch("/api/members/centers");
+    const response = await maruFetch("/api/members/centers");
     const result = await response.json();
     renderCenters(result.centers || []);
   } catch {
@@ -71,7 +71,7 @@ function renderActiveTerms(terms) {
 
 async function loadActiveTerms() {
   try {
-    const response = await fetch("/api/terms/active?scope=sales_register");
+    const response = await maruFetch("/api/terms/active?scope=sales_register");
     const result = await response.json();
     renderActiveTerms(result.terms || []);
   } catch {
@@ -83,7 +83,7 @@ salesRegisterForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   try {
-    const response = await fetch("/api/sales/register", {
+    const response = await maruFetch("/api/sales/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -48,7 +48,7 @@ function renderActiveTerms(terms) {
 
 async function loadActiveTerms() {
   try {
-    const response = await fetch("/api/terms/active?scope=funeral_member");
+    const response = await maruFetch("/api/terms/active?scope=funeral_member");
     const result = await response.json();
     renderActiveTerms(result.terms || []);
   } catch {
@@ -67,7 +67,7 @@ signupForm.addEventListener("submit", async (event) => {
   }
 
   try {
-    const response = await fetch("/api/signup", {
+    const response = await maruFetch("/api/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

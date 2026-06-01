@@ -1,6 +1,8 @@
 const CACHE_NAME = "maru-admin-v1";
 const APP_SHELL = [
   "./login.html",
+  "./config.js",
+  "./api.js",
   "./styles.css",
   "./login.js",
   "./install.js",

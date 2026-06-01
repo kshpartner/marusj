@@ -14,7 +14,7 @@ loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await maruFetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -274,7 +274,7 @@ function updateMetrics(members) {
 }
 
 async function fetchVisibleMembers() {
-  const response = await fetch(`/api/members/tree?rootUid=${encodeURIComponent(currentRootUid)}`);
+  const response = await maruFetch(`/api/members/tree?rootUid=${encodeURIComponent(currentRootUid)}`);
   const result = await response.json();
 
   if (!response.ok) {
@@ -384,7 +384,7 @@ async function createCenter(event) {
   };
 
   try {
-    const response = await fetch("/api/members/centers", {
+    const response = await maruFetch("/api/members/centers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -428,7 +428,7 @@ async function createInviteLink() {
   const uid = refUid.value.trim() || currentRootUid;
 
   try {
-    const response = await fetch("/api/invite-links", {
+    const response = await maruFetch("/api/invite-links", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -553,8 +553,8 @@ function renderAgreements(agreements) {
 async function loadTerms() {
   try {
     const [termsResponse, agreementsResponse] = await Promise.all([
-      fetch(`/api/terms?scope=${encodeURIComponent(document.querySelector("#termScope").value)}`),
-      fetch("/api/terms/agreements"),
+      maruFetch(`/api/terms?scope=${encodeURIComponent(document.querySelector("#termScope").value)}`),
+      maruFetch("/api/terms/agreements"),
     ]);
 
     const termsResult = await termsResponse.json();
@@ -584,11 +584,14 @@ async function saveTerm(event) {
   };
 
   try {
-    const response = await fetch(`/api/terms/${encodeURIComponent(payload.scope)}/${encodeURIComponent(payload.type)}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const response = await maruFetch(
+      `/api/terms/${encodeURIComponent(payload.scope)}/${encodeURIComponent(payload.type)}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+    );
 
     const result = await response.json();
     if (!response.ok) {
