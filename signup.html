@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상조 가입 약관서 | MaRu Partner</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="signup-shell">
+      <section class="signup-panel">
+        <div class="brand-lockup">
+          <div class="brand-mark">M</div>
+          <div>
+            <p class="eyebrow">상조 가입 약관서</p>
+            <h1>MaRu Partner</h1>
+          </div>
+        </div>
+
+        <form id="signupForm" class="login-form">
+          <input id="signupRefUid" type="hidden" />
+
+          <label>
+            이름
+            <input id="signupName" type="text" autocomplete="name" required />
+          </label>
+          <label>
+            연락처
+            <input id="signupPhone" type="tel" autocomplete="tel" required />
+          </label>
+          <label>
+            생년월일 8자
+            <input id="signupBirthDate" type="text" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="예: 19900101" required />
+          </label>
+          <label>
+            성별
+            <select id="signupGender" required>
+              <option value="">선택해주세요</option>
+              <option value="male">남성</option>
+              <option value="female">여성</option>
+              <option value="other">기타</option>
+            </select>
+          </label>
+          <label>
+            지역
+            <input id="signupRegion" type="text" placeholder="예: 서울 강남구, 부산 해운대구" required />
+          </label>
+          <label>
+            이메일
+            <input id="signupEmail" type="email" autocomplete="email" />
+          </label>
+
+          <div class="agreement-box">
+            <div id="activeTermsList" class="terms-preview-list">
+              <div class="form-note">약관을 불러오는 중입니다.</div>
+            </div>
+            <label class="check-label">
+              <input id="agreeTerms" type="checkbox" required />
+              상조 회원 가입 약관에 동의합니다.
+            </label>
+            <label class="check-label">
+              <input id="agreePrivacy" type="checkbox" required />
+              개인정보 수집 및 이용에 동의합니다.
+            </label>
+            <label class="check-label">
+              <input id="agreeMarketing" type="checkbox" />
+              마케팅 수신에 동의합니다.
+            </label>
+          </div>
+
+          <button class="primary-button" type="submit">상조 가입 신청</button>
+          <p id="signupMessage" class="form-note">가입 신청 후 담당자가 상담을 위해 연락드립니다.</p>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./config.js"></script>
+    <script src="./api.js"></script>
+    <script src="./signup.js"></script>
+  </body>
+</html>
