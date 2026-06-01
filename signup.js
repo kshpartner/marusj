@@ -1,3 +1,8 @@
+const serviceIntro = document.querySelector("#serviceIntro");
+const introSlides = document.querySelectorAll("[data-intro-slide]");
+const introDots = document.querySelectorAll("[data-intro-dot]");
+const introPrevButton = document.querySelector("#introPrevButton");
+const introNextButton = document.querySelector("#introNextButton");
 const signupForm = document.querySelector("#signupForm");
 const signupRefUid = document.querySelector("#signupRefUid");
 const signupName = document.querySelector("#signupName");
@@ -14,12 +19,34 @@ const activeTermsList = document.querySelector("#activeTermsList");
 const toast = document.querySelector("#toast");
 
 const params = new URLSearchParams(window.location.search);
+let currentIntroSlide = 0;
 signupRefUid.value = params.get("ref") || "";
 
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function setIntroSlide(index) {
+  currentIntroSlide = Math.max(0, Math.min(index, introSlides.length - 1));
+
+  introSlides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("active", slideIndex === currentIntroSlide);
+  });
+
+  introDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("active", dotIndex === currentIntroSlide);
+  });
+
+  introPrevButton.disabled = currentIntroSlide === 0;
+  introNextButton.textContent = currentIntroSlide === introSlides.length - 1 ? "가입 정보 입력하기" : "다음";
+}
+
+function showSignupForm() {
+  serviceIntro.hidden = true;
+  signupForm.hidden = false;
+  signupName.focus();
 }
 
 function renderActiveTerms(terms) {
@@ -55,6 +82,19 @@ async function loadActiveTerms() {
     renderActiveTerms([]);
   }
 }
+
+introPrevButton.addEventListener("click", () => {
+  setIntroSlide(currentIntroSlide - 1);
+});
+
+introNextButton.addEventListener("click", () => {
+  if (currentIntroSlide === introSlides.length - 1) {
+    showSignupForm();
+    return;
+  }
+
+  setIntroSlide(currentIntroSlide + 1);
+});
 
 signupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -107,4 +147,5 @@ signupForm.addEventListener("submit", async (event) => {
   }
 });
 
+setIntroSlide(0);
 loadActiveTerms();
