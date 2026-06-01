@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server/app.js",
     "dev": "node server/app.js",
-    "seed:terms": "node scripts/seedTerms.js"
+    "seed:terms": "node scripts/seedTerms.js",
+    "admin:password": "node scripts/updateAdminPassword.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

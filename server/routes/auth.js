@@ -30,7 +30,7 @@ router.post("/login", async (req, res, next) => {
     }
 
     const adminUsername = process.env.ADMIN_USERNAME || "admin";
-    const adminPassword = process.env.ADMIN_PASSWORD || "1";
+    const adminPassword = process.env.ADMIN_PASSWORD || "admin1234";
     const isAdminLogin = username === adminUsername && password === adminPassword;
 
     if (!isAdminLogin) {

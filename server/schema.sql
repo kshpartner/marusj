@@ -76,7 +76,7 @@ END;
 IF NOT EXISTS (SELECT 1 FROM dbo.MaruPartnerUsers WHERE uid = 'admin')
 BEGIN
   INSERT INTO dbo.MaruPartnerUsers (uid, username, password, name, role, parent_uid, status)
-  VALUES ('admin', 'admin', '1', N'관리자', 'admin', NULL, 'active');
+  VALUES ('admin', 'admin', 'admin1234', N'관리자', 'admin', NULL, 'active');
 END;
 
 IF OBJECT_ID('dbo.MaruPartnerInviteLinks', 'U') IS NULL

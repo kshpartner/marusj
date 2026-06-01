@@ -15,7 +15,7 @@ npm start
 http://localhost:3000/login.html
 ```
 
-초기 로그인 계정은 `.env`가 없을 때 `admin / 1`입니다.
+초기 로그인 계정은 `.env`가 없을 때 `admin / admin1234`입니다.
 
 ## 환경 변수
 
