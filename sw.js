@@ -1,4 +1,4 @@
-const CACHE_NAME = "maru-admin-v10";
+const CACHE_NAME = "maru-admin-v11";
 const APP_SHELL = [
   "./manifest.webmanifest",
   "./icons/maru-logo.svg",
