@@ -1677,6 +1677,351 @@ tbody tr:hover td {
   }
 }
 
+/* Black and gold brand theme */
+:root {
+  --bg: #000000;
+  --surface: #080808;
+  --surface-muted: #121212;
+  --text: #f7f1dd;
+  --muted: #b8af94;
+  --line: #312815;
+  --accent: #b99642;
+  --accent-dark: #d2b96d;
+  --accent-soft: #1c170b;
+  --warn: #d6a44b;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.48);
+}
+
+html,
+body,
+.admin-page,
+.login-page,
+.register-page,
+.service-page,
+.login-shell,
+.signup-shell,
+.service-signup-shell,
+.app-shell,
+.workspace {
+  background: #000000 !important;
+  color: var(--text);
+}
+
+.brand-mark {
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(185, 150, 66, 0.5);
+  border-radius: 50%;
+  background: #000 url("./icons/maru-logo.svg") center / 96% 96% no-repeat !important;
+  box-shadow: 0 0 0 1px rgba(185, 150, 66, 0.16), 0 14px 32px rgba(185, 150, 66, 0.18);
+  color: transparent;
+  font-size: 0;
+}
+
+.brand-lockup,
+.sidebar-brand {
+  color: var(--text);
+}
+
+.eyebrow,
+.metric span,
+.metric small,
+.timeline span,
+.timeline time,
+.rule-list,
+.empty-state span,
+.placeholder-view p,
+.form-note,
+.form-summary-card p,
+.install-box p,
+.term-item-heading span,
+.term-item p,
+.terms-preview p {
+  color: var(--muted);
+}
+
+h1,
+h2,
+h3,
+strong,
+label,
+.sidebar-brand strong {
+  color: var(--text);
+}
+
+.signup-panel,
+.login-panel,
+.panel,
+.metric,
+.terms-preview,
+.term-item,
+.install-box,
+.agreement-box,
+.form-summary-card,
+.dashboard-brief,
+.service-table-wrap,
+.empty-state,
+.tree-loading {
+  border-color: var(--line);
+  background: #080808 !important;
+  box-shadow: var(--shadow);
+}
+
+.login-visual,
+.service-hero,
+.sidebar {
+  background:
+    linear-gradient(145deg, rgba(0, 0, 0, 0.97), rgba(18, 15, 8, 0.97)),
+    #000000 !important;
+}
+
+.login-panel {
+  border-left-color: var(--line);
+}
+
+.topbar {
+  border-bottom-color: var(--line);
+  background: rgba(0, 0, 0, 0.92) !important;
+}
+
+.login-visual-copy,
+.login-visual-copy h2,
+.service-hero,
+.service-hero h2,
+.service-hero p {
+  color: var(--text);
+}
+
+.login-visual-copy .eyebrow,
+.service-hero .eyebrow {
+  color: #d2b96d;
+}
+
+.visual-stat-grid span,
+.service-assurance {
+  border-color: var(--line);
+  background: #0d0d0d !important;
+}
+
+.service-assurance {
+  gap: 1px;
+}
+
+.service-assurance span {
+  background: #050505 !important;
+  color: #d7c489;
+}
+
+input,
+select,
+textarea {
+  border-color: var(--line);
+  background: #050505 !important;
+  color: var(--text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #8f866e;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(185, 150, 66, 0.2);
+}
+
+.primary-button,
+.segment-button.active {
+  background: var(--accent) !important;
+  color: #070707;
+}
+
+.primary-button:hover {
+  background: var(--accent-dark) !important;
+}
+
+.outline-button,
+.ghost-button,
+.tab-button,
+.segment-button {
+  border-color: var(--line);
+  background: #0b0b0b !important;
+  color: var(--text);
+}
+
+.ghost-button {
+  color: #d2b96d;
+}
+
+.outline-button:hover,
+.ghost-button:hover {
+  border-color: var(--accent);
+  background: #15120a !important;
+}
+
+.text-button,
+.form-link,
+.tab-button.active {
+  color: #d2b96d;
+}
+
+.tab-list {
+  border-bottom-color: var(--line);
+}
+
+.tab-button.active {
+  border-bottom-color: var(--accent);
+}
+
+.menu-item {
+  color: #d5ccad;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  border-color: rgba(185, 150, 66, 0.34);
+  background: rgba(185, 150, 66, 0.12) !important;
+  color: #fff6db;
+}
+
+.menu-icon {
+  background: rgba(185, 150, 66, 0.14) !important;
+  color: #d2b96d;
+}
+
+.sidebar-brand {
+  border-bottom-color: rgba(185, 150, 66, 0.28);
+}
+
+.metric strong {
+  color: #d2b96d;
+}
+
+.dashboard-brief {
+  background:
+    linear-gradient(135deg, rgba(185, 150, 66, 0.12), rgba(0, 0, 0, 0.8)),
+    #080808 !important;
+}
+
+.timeline div,
+th,
+td,
+.terms-preview,
+.term-item,
+.tree-node {
+  border-color: var(--line);
+}
+
+table,
+.service-table {
+  color: var(--text);
+}
+
+th {
+  background: #111111 !important;
+  color: #d2b96d;
+}
+
+td {
+  color: #eee3c3;
+}
+
+tbody tr:hover td {
+  background: #101010 !important;
+}
+
+.service-table thead th {
+  background: #111111 !important;
+  color: #d2b96d;
+}
+
+.service-table tbody th {
+  background: #18140b !important;
+  color: #ead8a2;
+}
+
+.service-table td {
+  background: #050505 !important;
+}
+
+.service-summary-grid div,
+.plan-card,
+.tree-node {
+  border-color: var(--line);
+  background: #090909 !important;
+}
+
+.plan-card.featured {
+  background: #141009 !important;
+}
+
+.plan-card.premium {
+  background: #1b1509 !important;
+}
+
+.plan-card span,
+.plan-card.featured span,
+.plan-card.premium span,
+.service-summary-grid strong {
+  color: #d2b96d;
+}
+
+.plan-card p,
+.service-summary-grid span {
+  color: #c8bea1;
+}
+
+.intro-dot {
+  background: #2a2418;
+}
+
+.intro-dot.active {
+  background: var(--accent);
+}
+
+.signup-complete-panel {
+  border-color: var(--accent);
+  background: #080808 !important;
+}
+
+.signup-complete-panel h2,
+.signup-complete-panel p:not(.eyebrow) {
+  color: var(--text);
+}
+
+.kakao-channel-primary {
+  background: #fee500 !important;
+  color: #191600;
+}
+
+.kakao-channel-primary:hover {
+  background: #f3d900 !important;
+}
+
+.form-note.error {
+  color: #ff8f7d;
+}
+
+.admin-node,
+.sales-node,
+.center-node,
+.customer-node {
+  background: #090909 !important;
+}
+
+.tree-node span {
+  background: #171309 !important;
+  color: #d2b96d;
+}
+
+.toast {
+  border-color: var(--line);
+  background: #090909;
+  color: var(--text);
+}
+
 @media (max-width: 680px) {
   .login-visual {
     min-height: auto;
