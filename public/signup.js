@@ -18,6 +18,7 @@ const signupMessage = document.querySelector("#signupMessage");
 const signupCompletePanel = document.querySelector("#signupCompletePanel");
 const activeTermsList = document.querySelector("#activeTermsList");
 const toast = document.querySelector("#toast");
+const KAKAO_CHANNEL_URL = "https://pf.kakao.com/_Zcxnwn";
 
 const params = new URLSearchParams(window.location.search);
 let currentIntroSlide = 0;
@@ -146,6 +147,9 @@ signupForm.addEventListener("submit", async (event) => {
     signupCompletePanel.scrollIntoView({ behavior: "smooth", block: "center" });
     signupCompletePanel.focus({ preventScroll: true });
     showToast("가입 신청이 완료되었습니다.");
+    window.setTimeout(() => {
+      window.location.assign(KAKAO_CHANNEL_URL);
+    }, 900);
   } catch {
     signupMessage.textContent = "서버에 연결할 수 없습니다.";
     signupMessage.classList.add("error");
