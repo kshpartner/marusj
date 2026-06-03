@@ -10,32 +10,56 @@
     <title>로그인 | MaRu Partner Admin</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./icons/icon-192.png" />
-    <link rel="stylesheet" href="./styles.css?v=10" />
+    <link rel="stylesheet" href="./styles.css?v=12" />
   </head>
   <body class="login-page">
     <main class="login-shell">
-      <section class="login-visual" aria-label="파트너 계층 구조 미리보기">
+      <section class="login-visual" aria-label="마루상조 파트너 운영 콘솔 미리보기">
         <div class="login-visual-copy">
-          <p class="eyebrow">MaRu Partner Operations</p>
-          <h2>상조 회원 유입부터 조직별 관리까지 한 화면에서 정리합니다.</h2>
+          <p class="eyebrow">MARU PARTNER OPERATIONS</p>
+          <h2>상조 가입 접수부터 파트너 조직 관리까지 차분하게 정리합니다.</h2>
+          <p class="visual-lead">가입 링크, 약관 동의, 팀장별 유입 현황을 운영자가 바로 확인할 수 있는 블랙 골드 콘솔입니다.</p>
           <div class="visual-stat-grid">
-            <span>가입 링크</span>
-            <span>조직 트리</span>
-            <span>약관 동의</span>
+            <span><strong>4단계</strong><small>운영 구조</small></span>
+            <span><strong>실시간</strong><small>가입 접수</small></span>
+            <span><strong>카카오</strong><small>채널 연결</small></span>
           </div>
         </div>
-        <div class="network-map">
-          <span class="node node-admin">본사</span>
-          <span class="node node-sales-a">팀장 A</span>
-          <span class="node node-sales-b">팀장 B</span>
-          <span class="node node-customer-a">상조회원</span>
-          <span class="node node-customer-b">상조회원</span>
-          <span class="node node-customer-c">상조회원</span>
-          <span class="line line-a"></span>
-          <span class="line line-b"></span>
-          <span class="line line-c"></span>
-          <span class="line line-d"></span>
-          <span class="line line-e"></span>
+
+        <div class="operations-preview" aria-hidden="true">
+          <div class="preview-topbar">
+            <span>운영 현황</span>
+            <strong>admin</strong>
+          </div>
+          <div class="preview-metrics">
+            <article><span>사업단</span><strong>12</strong></article>
+            <article><span>팀장</span><strong>48</strong></article>
+            <article><span>상조회원</span><strong>326</strong></article>
+          </div>
+          <div class="preview-flow">
+            <div class="preview-flow-row active">
+              <span>01</span>
+              <strong>가입 링크 발급</strong>
+              <small>admin</small>
+            </div>
+            <div class="preview-flow-row">
+              <span>02</span>
+              <strong>약관 동의 및 신청</strong>
+              <small>고객</small>
+            </div>
+            <div class="preview-flow-row">
+              <span>03</span>
+              <strong>카카오채널 안내</strong>
+              <small>자동 이동</small>
+            </div>
+          </div>
+          <div class="preview-partners">
+            <span>본사</span>
+            <i></i>
+            <span>팀장</span>
+            <i></i>
+            <span>상조회원</span>
+          </div>
         </div>
       </section>
 
@@ -73,9 +97,9 @@
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script src="./config.js?v=10"></script>
-    <script src="./api.js?v=10"></script>
-    <script src="./login.js?v=10"></script>
-    <script src="./install.js?v=10"></script>
+    <script src="./config.js?v=12"></script>
+    <script src="./api.js?v=12"></script>
+    <script src="./login.js?v=12"></script>
+    <script src="./install.js?v=12"></script>
   </body>
 </html>
