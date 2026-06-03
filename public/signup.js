@@ -51,6 +51,13 @@ function showSignupForm() {
   signupName.focus();
 }
 
+function redirectToKakaoChannel() {
+  window.location.replace(KAKAO_CHANNEL_URL);
+  window.setTimeout(() => {
+    window.location.href = KAKAO_CHANNEL_URL;
+  }, 250);
+}
+
 function renderActiveTerms(terms) {
   activeTermsList.replaceChildren();
 
@@ -147,9 +154,7 @@ signupForm.addEventListener("submit", async (event) => {
     signupCompletePanel.scrollIntoView({ behavior: "smooth", block: "center" });
     signupCompletePanel.focus({ preventScroll: true });
     showToast("가입 신청이 완료되었습니다.");
-    window.setTimeout(() => {
-      window.location.assign(KAKAO_CHANNEL_URL);
-    }, 900);
+    redirectToKakaoChannel();
   } catch {
     signupMessage.textContent = "서버에 연결할 수 없습니다.";
     signupMessage.classList.add("error");
