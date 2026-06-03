@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>상조 회원 가입 | MaRu Partner</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=6" />
   </head>
   <body>
     <main class="signup-shell service-signup-shell">
@@ -187,20 +187,22 @@
 
           <button class="primary-button" type="submit">상조 가입 신청</button>
           <p id="signupMessage" class="form-note">가입 신청 후 담당자가 상담을 위해 연락드립니다.</p>
-          <div id="kakaoChannelCta" class="kakao-channel-card" hidden>
-            <div>
-              <strong>카카오채널도 가입해 주세요.</strong>
-              <p>마루상조 소식과 혜택 안내를 카카오채널에서 편하게 받아보실 수 있습니다.</p>
-            </div>
-            <a class="kakao-channel-button" href="https://pf.kakao.com/_Zcxnwn" target="_blank" rel="noopener noreferrer">카카오채널 가입하기</a>
-          </div>
         </form>
+
+        <section id="signupCompletePanel" class="signup-complete-panel" tabindex="-1" hidden>
+          <p class="eyebrow">가입 신청 완료</p>
+          <h2>상조 가입 신청이 완료되었습니다.</h2>
+          <p>마루상조 소식과 혜택 안내를 카카오채널에서 바로 받아보세요.</p>
+          <a class="kakao-channel-primary" href="https://pf.kakao.com/_Zcxnwn" target="_blank" rel="noopener noreferrer">
+            카카오채널 가입하고 소식, 혜택 받기
+          </a>
+        </section>
       </section>
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="./config.js?v=5"></script>
     <script src="./api.js?v=5"></script>
-    <script src="./signup.js?v=5"></script>
+    <script src="./signup.js?v=6"></script>
   </body>
 </html>

@@ -15,7 +15,7 @@ const agreeTerms = document.querySelector("#agreeTerms");
 const agreePrivacy = document.querySelector("#agreePrivacy");
 const agreeMarketing = document.querySelector("#agreeMarketing");
 const signupMessage = document.querySelector("#signupMessage");
-const kakaoChannelCta = document.querySelector("#kakaoChannelCta");
+const signupCompletePanel = document.querySelector("#signupCompletePanel");
 const activeTermsList = document.querySelector("#activeTermsList");
 const toast = document.querySelector("#toast");
 
@@ -99,7 +99,7 @@ introNextButton.addEventListener("click", () => {
 
 signupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  kakaoChannelCta.hidden = true;
+  signupCompletePanel.hidden = true;
 
   if (!signupRefUid.value) {
     signupMessage.textContent = "유효하지 않은 가입 링크입니다.";
@@ -141,7 +141,10 @@ signupForm.addEventListener("submit", async (event) => {
     signupRefUid.value = result.member.parentUid;
     signupMessage.textContent = "가입 신청이 완료되었습니다.";
     signupMessage.classList.remove("error");
-    kakaoChannelCta.hidden = false;
+    signupForm.hidden = true;
+    signupCompletePanel.hidden = false;
+    signupCompletePanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    signupCompletePanel.focus({ preventScroll: true });
     showToast("가입 신청이 완료되었습니다.");
   } catch {
     signupMessage.textContent = "서버에 연결할 수 없습니다.";
