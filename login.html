@@ -3,25 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#126c65" />
+    <meta name="theme-color" content="#b99642" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="MaRu Admin" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>로그인 | MaRu Partner Admin</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./icons/icon-192.png" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=10" />
   </head>
-  <body>
+  <body class="login-page">
     <main class="login-shell">
       <section class="login-visual" aria-label="파트너 계층 구조 미리보기">
+        <div class="login-visual-copy">
+          <p class="eyebrow">MaRu Partner Operations</p>
+          <h2>상조 회원 유입부터 조직별 관리까지 한 화면에서 정리합니다.</h2>
+          <div class="visual-stat-grid">
+            <span>가입 링크</span>
+            <span>조직 트리</span>
+            <span>약관 동의</span>
+          </div>
+        </div>
         <div class="network-map">
-          <span class="node node-admin">admin</span>
-          <span class="node node-sales-a">sales_001</span>
-          <span class="node node-sales-b">sales_002</span>
-          <span class="node node-customer-a">member</span>
-          <span class="node node-customer-b">member</span>
-          <span class="node node-customer-c">member</span>
+          <span class="node node-admin">본사</span>
+          <span class="node node-sales-a">팀장 A</span>
+          <span class="node node-sales-b">팀장 B</span>
+          <span class="node node-customer-a">상조회원</span>
+          <span class="node node-customer-b">상조회원</span>
+          <span class="node node-customer-c">상조회원</span>
           <span class="line line-a"></span>
           <span class="line line-b"></span>
           <span class="line line-c"></span>
@@ -32,7 +41,7 @@
 
       <section class="login-panel" aria-labelledby="loginTitle">
         <div class="brand-lockup">
-          <div class="brand-mark">M</div>
+          <div class="brand-mark"><img class="brand-logo" src="./icons/maru-logo.svg" alt="마루상조" /></div>
           <div>
             <p class="eyebrow">파트너 관리 시스템</p>
             <h1 id="loginTitle">MaRu Partner Admin</h1>
@@ -64,9 +73,9 @@
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script src="./config.js?v=3"></script>
-    <script src="./api.js?v=3"></script>
-    <script src="./login.js?v=3"></script>
-    <script src="./install.js?v=3"></script>
+    <script src="./config.js?v=10"></script>
+    <script src="./api.js?v=10"></script>
+    <script src="./login.js?v=10"></script>
+    <script src="./install.js?v=10"></script>
   </body>
 </html>

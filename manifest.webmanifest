@@ -5,10 +5,16 @@
   "start_url": "./login.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f6f8",
-  "theme_color": "#126c65",
+  "background_color": "#000000",
+  "theme_color": "#b99642",
   "orientation": "portrait-primary",
   "icons": [
+    {
+      "src": "./icons/maru-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "./icons/icon-192.png",
       "sizes": "192x192",

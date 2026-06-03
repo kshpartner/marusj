@@ -1,12 +1,7 @@
-const CACHE_NAME = "maru-admin-v2";
+const CACHE_NAME = "maru-admin-v10";
 const APP_SHELL = [
-  "./login.html",
-  "./config.js",
-  "./api.js",
-  "./styles.css",
-  "./login.js",
-  "./install.js",
   "./manifest.webmanifest",
+  "./icons/maru-logo.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
 ];
@@ -37,7 +32,26 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (event.request.mode === "navigate" || url.pathname.endsWith(".html")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request)),
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request)),
+    fetch(event.request)
+      .then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(event.request)),
   );
 });

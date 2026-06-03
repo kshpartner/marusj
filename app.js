@@ -79,6 +79,10 @@ function applyPermissions() {
     item.hidden = !canCreateSignupLink;
   });
 
+  document.querySelectorAll(".link-only").forEach((item) => {
+    item.hidden = !canCreateSignupLink;
+  });
+
   document.querySelectorAll(".admin-only").forEach((item) => {
     item.hidden = !isAdmin;
   });

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="마루상조 로고">
+  <rect width="120" height="120" fill="#000000"/>
+  <g fill="none" stroke="#b99642" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="60" r="49"/>
+    <path d="M58 13v68"/>
+    <path d="M28 30h25v38H28z"/>
+    <path d="M53 44c12 1 22-5 29-16"/>
+    <path d="M62 59h22c7 0 13 6 13 13v12H51"/>
+    <path d="M33 87h65"/>
+    <path d="M26 101h78"/>
+    <path d="M36 72c7 8 14 8 22 0"/>
+    <path d="M80 33l6-10 6 10 10 5-10 5-6 10-6-10-10-5z"/>
+  </g>
+  <g fill="#b99642">
+    <circle cx="36" cy="80" r="3.4"/>
+    <circle cx="45" cy="82" r="3.4"/>
+    <circle cx="54" cy="80" r="3.4"/>
+  </g>
+</svg>

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MaRu Partner Admin</title>
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=10" />
   </head>
-  <body>
+  <body class="admin-page">
     <main class="app-shell">
       <aside class="sidebar" aria-label="관리 메뉴">
         <div class="sidebar-brand">
-          <div class="brand-mark">M</div>
+          <div class="brand-mark"><img class="brand-logo" src="./icons/maru-logo.svg" alt="마루상조" /></div>
           <div>
             <strong>MaRu Admin</strong>
             <span>Partner Console</span>
@@ -44,6 +44,17 @@
         </header>
 
         <section class="view active" id="dashboardView">
+          <section class="dashboard-brief">
+            <div>
+              <p class="eyebrow">오늘의 운영 화면</p>
+              <h3>가입 링크, 조직 현황, 약관 동의를 빠르게 확인하세요.</h3>
+            </div>
+            <div class="dashboard-brief-actions">
+              <button class="ghost-button link-only" data-view-jump="links" type="button">가입 링크 만들기</button>
+              <button class="outline-button" data-view-jump="members" type="button">회원 보기</button>
+            </div>
+          </section>
+
           <div class="metric-grid">
             <article class="metric"><span>관리 구조</span><strong>4단계</strong><small>admin > 사업단 > 팀장 > 상조 회원</small></article>
             <article class="metric"><span>사업단</span><strong id="centerMetric">-</strong><small>admin이 직접 등록</small></article>
@@ -240,8 +251,8 @@
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script src="./config.js"></script>
-    <script src="./api.js"></script>
-    <script src="./app.js"></script>
+    <script src="./config.js?v=10"></script>
+    <script src="./api.js?v=10"></script>
+    <script src="./app.js?v=10"></script>
   </body>
 </html>
