@@ -4,9 +4,9 @@ const { getPool, hasDatabaseConfig, sql } = require("../db");
 const router = express.Router();
 
 const demoMembers = [
-  { id: 1, uid: "admin", name: "관리자", role: "admin", parentUid: null, status: "active" },
-  { id: 2, uid: "center_001", name: "서울센터", role: "center_manager", parentUid: "admin", status: "active" },
-  { id: 3, uid: "sales_001", name: "김영업", role: "sales", parentUid: "center_001", status: "active" },
+  { id: 1, uid: "admin", name: "관리자", role: "admin", parentUid: null, status: "active", createdAt: "2026-01-01T00:00:00Z" },
+  { id: 2, uid: "center_001", name: "서울센터", role: "center_manager", parentUid: "admin", status: "active", createdAt: "2026-01-02T00:00:00Z" },
+  { id: 3, uid: "sales_001", name: "김영업", role: "sales", parentUid: "center_001", status: "active", createdAt: "2026-01-03T00:00:00Z" },
   {
     id: 4,
     uid: "member_1001",
@@ -18,6 +18,7 @@ const demoMembers = [
     role: "funeral_member",
     parentUid: "sales_001",
     status: "joined",
+    createdAt: "2026-06-01T00:00:00Z",
   },
   {
     id: 5,
@@ -30,12 +31,13 @@ const demoMembers = [
     role: "funeral_member",
     parentUid: "admin",
     status: "pending",
+    createdAt: "2026-06-02T00:00:00Z",
   },
 ];
 
 const userSelect = `
   id, uid, username, name, phone, age, birth_date AS birthDate, gender, region, email, role,
-  parent_uid AS parentUid, status
+  parent_uid AS parentUid, status, created_at AS createdAt
 `;
 
 router.get("/", async (req, res, next) => {
@@ -157,7 +159,7 @@ router.get("/tree", async (req, res, next) => {
       .query(`
         WITH UserTree AS (
           SELECT id, uid, username, name, phone, age, birth_date AS birthDate, gender, region, email, role,
-                 parent_uid AS parentUid, status, 0 AS depth
+                 parent_uid AS parentUid, status, created_at AS createdAt, 0 AS depth
           FROM dbo.MaruPartnerUsers
           WHERE uid = @rootUid
 
@@ -165,11 +167,11 @@ router.get("/tree", async (req, res, next) => {
 
           SELECT child.id, child.uid, child.username, child.name, child.phone, child.age,
                  child.birth_date AS birthDate, child.gender, child.region, child.email, child.role,
-                 child.parent_uid AS parentUid, child.status, parent.depth + 1
+                 child.parent_uid AS parentUid, child.status, child.created_at AS createdAt, parent.depth + 1
           FROM dbo.MaruPartnerUsers child
           INNER JOIN UserTree parent ON child.parent_uid = parent.uid
         )
-        SELECT id, uid, username, name, phone, age, birthDate, gender, region, email, role, parentUid, status, depth
+        SELECT id, uid, username, name, phone, age, birthDate, gender, region, email, role, parentUid, status, createdAt, depth
         FROM UserTree
         ORDER BY depth ASC, id ASC
       `);
