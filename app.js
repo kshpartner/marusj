@@ -64,10 +64,391 @@ const genderLabels = {
   other: "기타",
 };
 
+const statusLabels = {
+  active: "활성",
+  joined: "가입 완료",
+  pending: "상담 접수",
+};
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+function formatBirthDate(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  if (digits.length !== 8) return value || "-";
+  return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6, 8)}`;
+}
+
+function maskPhone(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  if (digits.length < 7) return value || "-";
+  return `${digits.slice(0, 3)}-****-${digits.slice(-4)}`;
+}
+
+function getCertificateNo(member) {
+  const date = new Date(member.createdAt || Date.now());
+  const datePart = Number.isNaN(date.getTime())
+    ? new Date().toISOString().slice(0, 10).replaceAll("-", "")
+    : date.toISOString().slice(0, 10).replaceAll("-", "");
+  return `MARU-${datePart}-${String(member.uid || "").toUpperCase()}`;
+}
+
+function getOrganizationPath(member, memberMap) {
+  const chain = [];
+  let cursor = member;
+  const visited = new Set();
+
+  while (cursor && !visited.has(cursor.uid)) {
+    visited.add(cursor.uid);
+    chain.unshift(cursor.name || cursor.uid);
+    cursor = cursor.parentUid ? memberMap.get(cursor.parentUid) : null;
+  }
+
+  if (!chain.length) return "-";
+  return chain.join(" > ");
+}
+
+function openMembershipCertificate(member, memberMap) {
+  const certificateWindow = window.open("", "_blank", "width=980,height=1200");
+
+  if (!certificateWindow) {
+    showToast("팝업 차단을 해제한 뒤 다시 시도해주세요.");
+    return;
+  }
+
+  const parent = member.parentUid ? memberMap.get(member.parentUid) : null;
+  const issuedAt = formatDate(member.createdAt || new Date());
+  const certificateNo = getCertificateNo(member);
+  const organizationPath = getOrganizationPath(member, memberMap);
+  const logoUrl = new URL("./icons/maru-logo.svg", window.location.href).href;
+  const status = statusLabels[member.status] || member.status || "상담 접수";
+  const gender = genderLabels[member.gender] || member.gender || "-";
+
+  const rows = [
+    ["증서번호", certificateNo],
+    ["회원 UID", member.uid],
+    ["성명", member.name],
+    ["연락처", maskPhone(member.phone)],
+    ["생년월일", formatBirthDate(member.birthDate || member.birth_date)],
+    ["성별", gender],
+    ["지역", member.region || "-"],
+    ["가입 상태", status],
+    ["담당/상위자", parent ? `${parent.name || parent.uid} (${parent.uid})` : member.parentUid || "-"],
+    ["조직 경로", organizationPath],
+    ["가입 접수일", issuedAt],
+  ];
+
+  certificateWindow.document.write(`
+    <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>${escapeHtml(member.name)} 가입증서</title>
+        <style>
+          @page { size: A4; margin: 0; }
+          * { box-sizing: border-box; }
+          body {
+            margin: 0;
+            background: #1d1d1d;
+            color: #161616;
+            font-family: "Pretendard", "Malgun Gothic", "Segoe UI", sans-serif;
+          }
+          .certificate-page {
+            position: relative;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 20mm 18mm;
+            background: #fffaf0;
+          }
+          .certificate-page::before {
+            content: "";
+            position: absolute;
+            inset: 10mm;
+            border: 2px solid #b99642;
+            pointer-events: none;
+          }
+          .certificate-page::after {
+            content: "";
+            position: absolute;
+            inset: 14mm;
+            border: 1px solid rgba(185, 150, 66, 0.32);
+            pointer-events: none;
+          }
+          .certificate-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            min-height: 257mm;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 18px;
+          }
+          .certificate-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            border-bottom: 2px solid #161616;
+            padding-bottom: 18px;
+          }
+          .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+          }
+          .brand img {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #000;
+          }
+          .brand strong {
+            display: block;
+            color: #161616;
+            font-size: 20px;
+            letter-spacing: 0;
+          }
+          .brand span,
+          .certificate-no {
+            color: #6a5a32;
+            font-size: 12px;
+            font-weight: 800;
+          }
+          .title-block {
+            display: grid;
+            gap: 10px;
+            padding: 18px 0 10px;
+            text-align: center;
+          }
+          .title-block span {
+            color: #b99642;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+          }
+          h1 {
+            margin: 0;
+            color: #111;
+            font-size: 36px;
+            letter-spacing: 0.08em;
+          }
+          .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+          }
+          .summary-card {
+            border: 1px solid rgba(185, 150, 66, 0.44);
+            padding: 14px;
+            background: rgba(185, 150, 66, 0.08);
+          }
+          .summary-card span {
+            display: block;
+            margin-bottom: 6px;
+            color: #6a5a32;
+            font-size: 12px;
+            font-weight: 900;
+          }
+          .summary-card strong {
+            color: #111;
+            font-size: 22px;
+          }
+          .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 2px solid #161616;
+            border-left: 1px solid #cdb06b;
+          }
+          .detail-row {
+            display: grid;
+            grid-template-columns: 92px minmax(0, 1fr);
+            min-height: 42px;
+            border-right: 1px solid #cdb06b;
+            border-bottom: 1px solid #cdb06b;
+          }
+          .detail-row.wide {
+            grid-column: 1 / -1;
+          }
+          .detail-row span {
+            display: grid;
+            place-items: center;
+            background: #161616;
+            color: #f3e1a8;
+            font-size: 12px;
+            font-weight: 900;
+          }
+          .detail-row strong {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            padding: 10px 12px;
+            color: #161616;
+            font-size: 14px;
+            line-height: 1.45;
+            word-break: keep-all;
+          }
+          .statement {
+            display: grid;
+            gap: 12px;
+            border: 1px solid rgba(185, 150, 66, 0.46);
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.5);
+            color: #292311;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.75;
+            text-align: center;
+          }
+          .statement small {
+            color: #6a5a32;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.6;
+          }
+          .certificate-footer {
+            display: grid;
+            gap: 14px;
+            padding-top: 18px;
+            text-align: center;
+          }
+          .issued-date {
+            color: #161616;
+            font-size: 16px;
+            font-weight: 900;
+          }
+          .signature {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            justify-self: center;
+            min-width: 280px;
+            border-top: 2px solid #161616;
+            padding-top: 14px;
+            color: #161616;
+            font-size: 20px;
+            font-weight: 900;
+          }
+          .signature img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #000;
+          }
+          .print-actions {
+            position: fixed;
+            right: 18px;
+            top: 18px;
+            display: flex;
+            gap: 8px;
+          }
+          .print-actions button {
+            min-height: 38px;
+            border: 1px solid #b99642;
+            border-radius: 8px;
+            padding: 0 13px;
+            background: #111;
+            color: #f3e1a8;
+            font-weight: 900;
+            cursor: pointer;
+          }
+          @media print {
+            body { background: #fffaf0; }
+            .certificate-page { margin: 0; }
+            .print-actions { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="print-actions">
+          <button onclick="window.print()">PDF 저장 / 인쇄</button>
+          <button onclick="window.close()">닫기</button>
+        </div>
+        <main class="certificate-page">
+          <section class="certificate-inner">
+            <header class="certificate-header">
+              <div class="brand">
+                <img src="${logoUrl}" alt="마루상조" />
+                <div>
+                  <strong>마루상조</strong>
+                  <span>MARU FUNERAL MEMBERSHIP</span>
+                </div>
+              </div>
+              <div class="certificate-no">${escapeHtml(certificateNo)}</div>
+            </header>
+
+            <section class="title-block">
+              <span>MEMBERSHIP CERTIFICATE</span>
+              <h1>상조 회원 가입증서</h1>
+              <div class="summary">
+                <div class="summary-card"><span>회원명</span><strong>${escapeHtml(member.name || "-")}</strong></div>
+                <div class="summary-card"><span>가입 상태</span><strong>${escapeHtml(status)}</strong></div>
+              </div>
+            </section>
+
+            <section>
+              <div class="details">
+                ${rows
+                  .map(([label, value]) => `
+                    <div class="detail-row ${label === "조직 경로" ? "wide" : ""}">
+                      <span>${escapeHtml(label)}</span>
+                      <strong>${escapeHtml(value || "-")}</strong>
+                    </div>
+                  `)
+                  .join("")}
+              </div>
+              <div class="statement">
+                위 회원은 마루상조 파트너 관리 시스템을 통해 상조 회원 가입 신청이 정상 접수되었음을 확인합니다.
+                <small>
+                  본 증서는 가입 신청 접수 확인용 문서입니다. 최종 상품, 계약 조건 및 서비스 제공 범위는 상담 및 별도 계약서 기준으로 확정됩니다.
+                </small>
+              </div>
+            </section>
+
+            <footer class="certificate-footer">
+              <div class="issued-date">${escapeHtml(issuedAt)}</div>
+              <div class="signature">
+                <span>마루상조 파트너 운영본부</span>
+                <img src="${logoUrl}" alt="" />
+              </div>
+            </footer>
+          </section>
+        </main>
+        <script>
+          window.addEventListener("load", () => {
+            window.setTimeout(() => window.print(), 350);
+          });
+        </script>
+      </body>
+    </html>
+  `);
+
+  certificateWindow.document.close();
 }
 
 function applyPermissions() {
@@ -330,7 +711,7 @@ function renderMembers(members) {
   if (!visibleMembers.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 10;
+    cell.colSpan = 11;
     cell.textContent = "표시할 회원이 없습니다.";
     row.append(cell);
     membersTableBody.append(row);
@@ -349,12 +730,25 @@ function renderMembers(members) {
       roleLabels[member.role] || member.role,
       getParentName(member, memberMap),
       member.parentUid || "-",
-      member.status,
+      statusLabels[member.status] || member.status,
     ].forEach((value) => {
       const cell = document.createElement("td");
       cell.textContent = value || "";
       row.append(cell);
     });
+
+    const certificateCell = document.createElement("td");
+    if (["funeral_member", "customer"].includes(member.role)) {
+      const certificateButton = document.createElement("button");
+      certificateButton.type = "button";
+      certificateButton.className = "outline-button compact-action";
+      certificateButton.textContent = "증서 출력";
+      certificateButton.addEventListener("click", () => openMembershipCertificate(member, memberMap));
+      certificateCell.append(certificateButton);
+    } else {
+      certificateCell.textContent = "-";
+    }
+    row.append(certificateCell);
     membersTableBody.append(row);
   });
 }
